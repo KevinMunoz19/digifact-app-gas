@@ -29,6 +29,7 @@ const Products = (props) =>{
 
         var query = `select * from product`;
         select(query,[],(products)=>{
+					console.log(products)
             setProductList(products);
         })
 	},[])

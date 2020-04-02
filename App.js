@@ -32,6 +32,9 @@ import Products from './src/views/Products';
 import Product from './src/views/Product';
 import Dtes from './src/views/Dtes';
 import DtesSummary from './src/views/DtesSummary';
+import LoginUsers from './src/views/LoginUsers';
+import UsersLogged from './src/views/UsersLogged';
+import NewUserLoginForm from './src/views/NewUserLoginForm';
 
 const App = () => {
   return (
@@ -51,6 +54,9 @@ const App = () => {
         <Scene key="product" component={Product} hideNavBar={true} title="Product"/>
         <Scene key="dtes" component={Dtes} hideNavBar={true} title="Dtes"/>
         <Scene key="dtessummary" component={DtesSummary} hideNavBar={true} title="DtesSummary"/>
+        <Scene key="loginusers" component={LoginUsers} hideNavBar={true} title="LoginUsers"/>
+        <Scene key="userslogged" component={UsersLogged} hideNavBar={true} title="UsersLogged"/>
+        <Scene key="newuserloginform" component={NewUserLoginForm} hideNavBar={true} title="NewUserLoginForm"/>
     	</Scene>
     </Router>
   );

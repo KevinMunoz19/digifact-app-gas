@@ -1,8 +1,5 @@
 import React, {Fragment,useState,useEffect} from 'react';
-
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
-
 import {
 	Text,
 	View,
@@ -16,12 +13,13 @@ import {
 	ActivityIndicator,
 	ScrollView,
 }	from 'react-native';
-
-
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {Actions} from 'react-native-router-flux';
 import useUser from './../utils/useUser';
 import useApi from './../utils/useApi';
+
+
+
 const Login = () =>{
 
 	const [nit,setNit] = useState('');
@@ -72,7 +70,6 @@ const Login = () =>{
 							Actions.home();
 						}
 					});
-
 				}else{
 					setLoading(false);
 					if(response.code == 2001){
@@ -92,65 +89,40 @@ const Login = () =>{
 
 
 	return(
-		// <ImageBackground source={require('../img/Fondo.png')} style={{width: '100%', height: '100%'}} >
-		// 	<View style={styles.container}>
-		// 		<Image source={require('../img/logo.png')} style={styles.logo}/>
-
-		// 		<TextInput style = {styles.input}
-		// 			placeholder="Nit"
-		// 			onChangeText={(e)=>{setNit(e)}}
-		// 		/>
-		// 		<TextInput style = {styles.input}
-		// 			placeholder="Username "
-		// 			onChangeText={(e)=>{setUsername(e)}}
-		// 		/>
-		// 		<TextInput style = {styles.input}
-		// 			placeholder="Password"
-		// 			onChangeText={(e)=>{setPassword(e)}}
-		// 			secureTextEntry={true}
-		// 		/>
-		// 		{(loading)&&(
-		// 			<ActivityIndicator visible={false} size='large' color='#26A657'/>
-		// 		)}
-		// 		<TouchableOpacity style={styles.sendButton}	onPress={handlerSend}>
-		// 			<Text style={{color:'white',textAlign:'center'}}>Login</Text>
-		// 		</TouchableOpacity>
-		// 	</View>
-		// </ImageBackground >
 		<ScrollView style={{backgroundColor:'white',flex:1}}>
-		<View style={loginStyles.primaryContainer}>
-			<View style={loginStyles.headerContainer}>
-
-			</View>
-			<View style={loginStyles.imageContainer}>
-
-				<Image source={require('../img/logo.png')} style={loginStyles.logo}/>
-			</View>
-			<View style={loginStyles.formContainer}>
-				<View style={loginStyles.inputContainer}>
-					<Icon
-						name="fingerprint"
-						color="#828B95"
-						size={20}/>
-					<TextInput
-						placeholder='NIT'
-						style={loginStyles.input}
-						onChangeText={(e)=>{setNit(e)}}
-					/>
+			<View style={loginStyles.primaryContainer}>
+				<View style={loginStyles.headerContainer}>
 				</View>
-				<View style={loginStyles.inputContainer}>
-					<Icon
-						name="person-pin"
-						color="#828B95"
-						size={20}/>
-					<TextInput
-						placeholder='USUARIO'
-						style={loginStyles.input}
-						onChangeText={(e)=>{setUsername(e)}}
-					/>
+				<View style={loginStyles.imageContainer}>
+					<Image source={require('../img/logo.png')} style={loginStyles.logo}/>
 				</View>
-				<View style={loginStyles.inputContainer}>
-					{/* <View style={{flexDirection:'row',alignItems:'center'}}> */}
+				<View style={loginStyles.formContainer}>
+					<View style={loginStyles.inputContainer}>
+						<Icon
+							name="fingerprint"
+							color="#828B95"
+							size={20}
+						/>
+						<TextInput
+							placeholder='NIT'
+							style={loginStyles.input}
+							onChangeText={(e)=>{setNit(e)}}
+						/>
+					</View>
+					<View style={loginStyles.inputContainer}>
+						<Icon
+							name="person-pin"
+							color="#828B95"
+							size={20}
+						/>
+						<TextInput
+							placeholder='USUARIO'
+							style={loginStyles.input}
+							onChangeText={(e)=>{setUsername(e)}}
+						/>
+					</View>
+					<View style={loginStyles.inputContainer}>
+						{/* <View style={{flexDirection:'row',alignItems:'center'}}> */}
 						<Icon
 							name="lock"
 							color="#828B95"
@@ -163,18 +135,17 @@ const Login = () =>{
 							secureTextEntry={true}
 						/>
 					{/* </View> */}
-
+					</View>
+				</View>
+				{(loading)&&(
+					<ActivityIndicator visible={false} size='large' color='#26A657'/>
+				)}
+				<View style={loginStyles.buttonContainer}>
+					<TouchableOpacity style={loginStyles.button} onPress={handlerSend}>
+						<Text style={loginStyles.buttonText}>INICIAR SESION</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
-			{(loading)&&(
-				<ActivityIndicator visible={false} size='large' color='#26A657'/>
-			)}
-			<View style={loginStyles.buttonContainer}>
-				<TouchableOpacity style={loginStyles.button} onPress={handlerSend}>
-					<Text style={loginStyles.buttonText}>INICIAR SESION</Text>
-				</TouchableOpacity>
-			</View>
-		</View>
 		</ScrollView>
 	);
 }
@@ -235,7 +206,7 @@ const loginStyles = StyleSheet.create({
 	}
 
 })
-//
+
 const styles = StyleSheet.create({
 	container:{
 		flex: 1,
@@ -268,7 +239,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		borderRadius:9
 	},
-
  })
 
 export default Login;

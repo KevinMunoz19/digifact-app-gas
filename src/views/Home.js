@@ -38,6 +38,7 @@ const Home = () => {
   			case 'dte':Actions.dte(); break;
   			case 'dtes':Actions.dtes(); break;
         case 'dtessummary':Actions.dtessummary(); break;
+        case 'loginusers':Actions.loginusers(); break;
 
   		}
     }
@@ -113,9 +114,10 @@ const Home = () => {
                 <TouchableOpacity onPress={()=>handlePress('clients')} style={styles.sectionTouch}>
 					<Text style={styles.sectionTouchText}>Mis Clientes</Text>
 				</TouchableOpacity>
-                <TouchableOpacity onPress={()=>handlePress('dtessummary')} style={styles.sectionTouch}>
-          <Text style={styles.sectionTouchText}>Resumen de Facturas</Text>
+                <TouchableOpacity onPress={()=>handlePress('loginusers')} style={styles.sectionTouch}>
+          <Text style={styles.sectionTouchText}>Login Usuario</Text>
         </TouchableOpacity>
+
             </ImageBackground>
         </View>
     );

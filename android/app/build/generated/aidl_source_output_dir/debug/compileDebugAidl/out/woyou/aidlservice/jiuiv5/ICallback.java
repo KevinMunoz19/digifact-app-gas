@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\Users\\kevin\\github\\d-sunmi-implementation\\android\\app\\src\\main\\aidl\\woyou\\aidlservice\\jiuiv5\\ICallback.aidl
+ * Original file: C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\src\\main\\aidl\\woyou\\aidlservice\\jiuiv5\\ICallback.aidl
  */
 package woyou.aidlservice.jiuiv5;
 /**
