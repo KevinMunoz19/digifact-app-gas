@@ -45,11 +45,20 @@ const UsersLogged = () =>{
     },[])
 
 
+		function findNewUser(){
+			var query = `select * from loginusers`;
+			select(query,[],(dtes)=>{
+				console.log(dtes);
+				setUs(dtes[1].codigo_usuario);
+				setPass(dtes[1].password);
+			})
+		}
+
+
 
 
 
 	return(
-
         <View style={styles.container}>
             <Modal visible={pdfModalVisible}>
                 <TouchableOpacity  onPress={()=>Actions.home()} style={styles.closeModalButton}>
@@ -72,6 +81,12 @@ const UsersLogged = () =>{
 
 								<Text>Usuario {us}</Text>
 								<Text>Password {pass}</Text>
+
+								<View style={styles.buttonContainer}>
+									<TouchableOpacity style={styles.button} onPress={findNewUser}>
+										<Text style={styles.buttonText}>Modificar</Text>
+									</TouchableOpacity>
+								</View>
 
 
 
@@ -172,6 +187,22 @@ const styles = StyleSheet.create({
         color:'white',
         fontSize:12
     },
+		buttonContainer:{
+			flex:2,
+			backgroundColor:'white',
+			alignItems:'center'
+		},
+		button:{
+			width:'50%',
+			height:'90%',
+			backgroundColor:'#828B95',
+			alignItems:'center',
+			justifyContent:'center'
+		},
+		buttonText:{
+			color:'white',
+			fontSize:20
+		}
 });
 
 export default UsersLogged;

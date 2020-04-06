@@ -27,6 +27,8 @@ const LoginUsers = () =>{
 	const [password,setPassword] = useState('');
 	const {setUserLogin,getUserLogin} = useUserLogin();
 	const [loading,setLoading] = useState(false);
+	const {select,insert} = DB();
+	const [userVerification,setUserVerification] = useState([]);
 
 	useEffect(()=>{
 		getUserLogin((users)=>{
@@ -35,11 +37,8 @@ const LoginUsers = () =>{
 	},[])
 
 	useEffect(()=>{
-			//var query = `select * from loginusers`;
-			//select(query,[],(dtes)=>{
-				//setUs(dtes[0].codigo_usuario);
-				//setPass(dtes[0].password);
-			//})
+
+
 	},[])
 
 	function createNewUser() {
@@ -47,7 +46,45 @@ const LoginUsers = () =>{
 	}
 
 	function verifyUser() {
-		Actions.userslogged();
+		setLoading(true);
+
+
+		if (username.trim().length > 0 &&
+				password.trim().length > 0){
+
+
+			//var queryver = `select * from loginusers where codigo_usuario = ${username.trim()} and password = ${password.trim()}`;
+			var queryver = `select * from loginusers where codigo_usuario = "${username.trim()}"`;
+			select(queryver,[],(dtes)=>{
+				console.log("Query concatenado");
+				console.log(queryver);
+				console.log("res");
+				console.log(dtes);
+				if (password == dtes[0].password) {
+					setLoading(false);
+
+					var queryup = `
+						UPDATE loginusers set logged_in = "1" where codigo_usuario = "123"
+						`;
+						insert(queryup,[],(result)=>{
+							console.log('Update Completado',result);
+						})
+
+					Actions.userslogged();
+				} else {
+					setLoading(false);
+					Alert.alert('Usuario o Clave invalida');
+
+				}
+			})
+
+		}	else {
+			setLoading(false);
+			Alert.alert('Llenar todos los campos');
+		}
+
+
+
 	}
 
 
