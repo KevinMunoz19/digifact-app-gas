@@ -10,7 +10,8 @@ import {
     Button,
     TouchableOpacity,
     ImageBackground,
-    Modal
+    Modal,
+		Picker
 }	from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -24,9 +25,8 @@ const UsersLogged = () =>{
     const [loading,setLoading] = useState(false);
     const {select} = DB();
 
-		const [dteListCash,setDteListCash] = useState([]);
-		const [dteListCheck,setDteListCheck] = useState([]);
-		const [dteListCard,setDteListCard] = useState([]);
+		const [usersList,setUsersList] = useState([]);
+
 
 		const [us,setUs] = useState('');
 		const [pass,setPass] = useState('');
@@ -39,6 +39,7 @@ const UsersLogged = () =>{
         var query = `select * from loginusers`;
         select(query,[],(dtes)=>{
 					console.log(dtes);
+					setUsersList(dtes);
 					setUs(dtes[0].codigo_usuario);
           setPass(dtes[0].password);
         })
@@ -53,6 +54,10 @@ const UsersLogged = () =>{
 				setPass(dtes[1].password);
 			})
 		}
+
+		function h() {
+
+	}
 
 
 
@@ -87,6 +92,36 @@ const UsersLogged = () =>{
 										<Text style={styles.buttonText}>Modificar</Text>
 									</TouchableOpacity>
 								</View>
+
+								<View style={styles.buttonContainer}>
+									<TouchableOpacity style={styles.button} onPress={()=>Actions.gasdataform()}>
+										<Text style={styles.buttonText}>Datos Gasolinera</Text>
+									</TouchableOpacity>
+								</View>
+
+
+
+
+								<View style={styles.formRow}>
+			            <View style={[styles.inputContainer, styles.input]}>
+			              <Picker
+			                style={styles.selectInput}
+			                placeholder="Nacionalidad"
+			              >
+										<Picker.Item label="Nacionalidad" value={null} disabled={true} />
+										{usersList.map((usr)=>{
+												return(
+														<Picker.Item label={usr.codigo_usuario} value="Guatemala" />
+												)
+										})}
+
+
+
+			              </Picker>
+			            </View>
+			          </View>
+
+
 
 
 
@@ -202,7 +237,22 @@ const styles = StyleSheet.create({
 		buttonText:{
 			color:'white',
 			fontSize:20
-		}
+		},
+		formRow: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			marginBottom: 30
+	},
+	inputContainer:{
+			flex: 1,
+	},
+	input: {
+		borderBottomColor:'#828B95',
+		borderBottomWidth:1
+	},
+	selectInput: {
+			fontSize: 10
+	},
 });
 
 export default UsersLogged;

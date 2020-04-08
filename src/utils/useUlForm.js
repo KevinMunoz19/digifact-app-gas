@@ -74,7 +74,7 @@ const useUlForm = (callback) => {
 			insert(query,fields,(result)=>{
 				Alert.alert(`Usuario Login ${messageVerb} con exito`);
 				if(onSelect == null){
-					//Actions.clients({action:'manage'});
+					Actions.loginusers();
 				}else{
 					select(`select * from loginusers order by id desc limit 1`,[],(loginu)=>{
 						console.log(loginu[0]);

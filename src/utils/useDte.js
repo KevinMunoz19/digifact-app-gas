@@ -234,6 +234,7 @@ const useDte = (props) => {
 
     var totalAmount = 0;
 	  var totalTaxAmount = 0;
+    var totalIdpAmount
     var itemsString = ``;
     if(iva > 0 ){
       var taxShortName = 'IVA';
@@ -245,6 +246,10 @@ const useDte = (props) => {
     products.forEach((product,i)=>{
       //buscar tipo de bien o servicio
       // buscar tipos de medidas
+
+
+
+
       var taxableAmount = iva == 0?(product.price * product.quantity) : (product.price / ((iva * 0.01) + 1)) * product.quantity;
       var taxAmount = (iva * 0.01) * taxableAmount;
       var totalItemAmount = product.price * product.quantity;
@@ -262,7 +267,7 @@ const useDte = (props) => {
           <dte:Precio>${totalItemAmount.toFixed(2)}</dte:Precio>
           <dte:Descuento>0</dte:Descuento>
           <dte:Impuestos>
-              <dte:Impuesto>
+            <dte:Impuesto>
               <dte:NombreCorto>${taxShortName}</dte:NombreCorto>
               <dte:CodigoUnidadGravable>${taxCodeNumber}</dte:CodigoUnidadGravable>
               <dte:MontoGravable>${taxableAmount.toFixed(2)}</dte:MontoGravable>
@@ -273,6 +278,9 @@ const useDte = (props) => {
         </dte:Item>
         `;
       });
+
+
+
       return {
         itemsString,
         totalAmount,
@@ -280,19 +288,32 @@ const useDte = (props) => {
       }
     }
 
-    const generateTotals = (products,iva,setTotal,setSubTotal)=>{
-        var totalAmount = 0;
+    //const generateTotals = (products,iva,setTotal,setSubTotal)=>{
+    const generateTotals = (products,iva,setTotal,setSubTotal,setIdpTotal,idpSuper,idpRegular,idpDiesel)=>{
+      var totalAmount = 0;
 	    var totalTaxAmount = 0;
 	    var itemsString = ``;
+      var totalIdpAmount = 0;
         products.forEach((product,i)=>{
+
+          if (product.code == 'Super') {
+            var totalItemIdpAmount = product.quantity * idpSuper;
+            var totalItemAmount = product.price * product.quantity;
+
+            totalAmount += totalItemAmount;
+            totalIdpAmount += totalItemIdpAmount;
+          }else{
             var taxableAmount = iva == 0?(product.price * product.quantity) : (product.price / ((iva * 0.01) + 1)) * product.quantity;
             var taxAmount = (iva * 0.01) * taxableAmount;
             var totalItemAmount = product.price * product.quantity;
             totalAmount += totalItemAmount;
             totalTaxAmount += taxAmount;
+          }
+
         });
         setTotal(totalAmount.toFixed(2).toLocaleString('USD'));
-        setSubTotal((totalAmount - totalTaxAmount).toFixed(2).toLocaleString('USD'));
+        setSubTotal((totalAmount - totalTaxAmount - totalIdpAmount).toFixed(2).toLocaleString('USD'));
+        setIdpTotal(totalIdpAmount.toFixed(2).toLocaleString('USD'));
     }
 
     return {

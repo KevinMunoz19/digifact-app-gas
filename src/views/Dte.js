@@ -67,6 +67,7 @@ const Dte = () =>{
 	const [products,setProducts] = useState([]);
 	const [total,setTotal] = useState(0);
 	const [subTotal,setSubTotal] = useState(0);
+	const [idpTotal,setIdpTotal] = useState(0);
 	const {generateTotals,generateString,generateEmailString} = useDte();
 	const {getUser} = useUser();
 	const [user,setUser] = useState();
@@ -98,6 +99,17 @@ const Dte = () =>{
 
 	const [payment,setPayment] = useState(0);
 
+	const [idpSuper,setIdpSuper] = useState(4.7);
+	const [idpRegular,setIdpRegular] = useState(4.6);
+	const [idpDiesel,setIdpDiesel] = useState(1.3);
+	const [bombas,setBombas] = useState([]);
+
+	const [datosGas,setDatosGas] = useState([]);
+
+	const [gasType, setGasType] = useState("");
+	const [bombNumber, setBombNumber] = useState("");
+
+
 	const radioProps = [
 		{label: 'Nit  ', value: false },
 		{label: 'Consumidor Final	', value: true }
@@ -115,7 +127,7 @@ const Dte = () =>{
 	];
 
 	useEffect(()=>{
-		generateTotals(products,iva,setTotal,setSubTotal)
+		generateTotals(products,iva,setTotal,setSubTotal,setIdpTotal,idpSuper,idpRegular,idpDiesel)
 	},[products,iva])
 
 	useEffect(()=>{
@@ -135,6 +147,31 @@ const Dte = () =>{
 		console.log('Cambio de user:');
 		setNumEstablecimiento(0);
 	},[user])
+
+	function addGas() {
+		var gasproduct = { price: 25, code: 'Super', name: 'Super', id: 150, quantity: 1 };
+		setProducts([...products,gasproduct]);
+	}
+
+	useEffect(()=>{
+			var querybombas = `select * from datosgas`;
+			select(querybombas,[],(dg)=>{
+				console.log(dg);
+				//setDatosGas(dtes);
+				var numerobombas = dg[0].bombas;
+				const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+				var nb = range(1,numerobombas,1);
+				setBombas(nb);
+				console.log("array de bombas");
+				console.log(nb);
+
+
+				setIdpSuper(dg[0].preciosuper);
+				setIdpRegular(dg[0].precioregular);
+				setIdpDiesel(dg[0].preciodiesel);
+
+			})
+	},[])
 
 
 
@@ -167,6 +204,9 @@ const Dte = () =>{
 	}
 
 	const onProductSelect = (product)=>{
+		console.log("producto")
+		console.log(typeof product)
+		console.log(product)
 		console.warn('pasa el producto a la vista de dte');
 		setTimeout(()=>{
 			if(createProductModalVisible)setCreateProductModalVisible(false);
@@ -477,6 +517,86 @@ const Dte = () =>{
 						</View>
 					</View>
 
+
+
+					<View style={{width:'100%',alignItems:'center'}}>
+						<SectionDivider width={'80%'} sectionName={'Gasolina'}/>
+					</View>
+
+					<View style={styles.contentContainer}>
+
+
+	            <View style={[styles.inputContainer, styles.input]}>
+	              <Picker
+	                style={styles.selectInput}
+	                placeholder="Gasolina"
+									selectedValue={gasType}
+									onValueChange={(itemValue, itemIndex) => setGasType(itemValue)}
+	              >
+	                <Picker.Item label="Tipo de Gasolina" value={null} disabled={true} />
+	                <Picker.Item label="Super" value="Super" />
+	                <Picker.Item label="Regular" value="Regular" />
+									<Picker.Item label="Diesel" value="Diesel" />
+	              </Picker>
+	            </View>
+
+							<View style={[styles.inputContainer, styles.input]}>
+								<Picker
+									style={styles.selectInput}
+									placeholder="Numero de Bomba"
+									selectedValue={bombNumber}
+									onValueChange={(itemValue, itemIndex) => setBombNumber(itemValue)}
+								>
+									<Picker.Item label="Numero de Bomba" value={null} disabled={true} />
+									{bombas.map((usr,i)=>{
+										var st = `Bomba Numero ${usr.toString()}`;
+										var num = `${usr.toString()}`;
+											return(
+													<Picker.Item label= {st} value={num} />
+											)
+									})}
+								</Picker>
+							</View>
+
+
+
+
+
+						<View style={{width:'100%',height:'30%',marginTop:'5%', alignItems:'center'}}>
+							{/* Fila 3: email */}
+							<TextInput
+								placeholder="Galones"
+								placeholderTextColor="black"
+								style={styles.inputBorder}
+								keyboardType = 'numeric'
+							/>
+						</View>
+
+
+
+						<TouchableOpacity
+							onPress={()=>addGas()}
+							style={styles.clientListButton}
+						>
+							<Icon
+								name="description"
+								color="black"
+								size={20}
+								style={styles.listIcon}
+							/>
+							<Text fonSize={10} style={styles.fontSize}>Agregar Gasolina</Text>
+						</TouchableOpacity>
+
+
+
+
+
+
+					</View>
+
+
+
+
 					<View style={{width:'100%',alignItems:'center'}}>
 						<SectionDivider width={'80%'} sectionName={'PRODUCTOS O SERVICIOS'}/>
 					</View>
@@ -509,6 +629,13 @@ const Dte = () =>{
 							<View style={styles.totalContainers}>
 								<Text>Sub Total: {subTotal}</Text>
 							</View>
+
+
+							<View style={styles.totalContainers}>
+								<Text>IDP: {idpTotal}</Text>
+							</View>
+
+
 							<View style={styles.totalContainers}>
 								<Text>Total: {total}</Text>
 							</View>
@@ -688,7 +815,30 @@ const styles = StyleSheet.create({
     borderTopWidth:1,
     justifyContent:'center',
     alignItems:'center'
-  }
+  },
+	formRow: {
+		paddingLeft: 10,
+		alignItems:'center',
+		width: '60%',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		//justifyContent: 'space-between',
+		marginBottom: 5
+},
+inputContainer:{
+	justifyContent: 'center',
+		width: '60%',
+		flex: 1,
+},
+input: {
+
+	//width: '60%',
+	borderBottomColor:'#828B95',
+	borderBottomWidth:1
+},
+selectInput: {
+		fontSize: 10
+},
 });
 
 export default Dte;

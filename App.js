@@ -35,6 +35,7 @@ import DtesSummary from './src/views/DtesSummary';
 import LoginUsers from './src/views/LoginUsers';
 import UsersLogged from './src/views/UsersLogged';
 import NewUserLoginForm from './src/views/NewUserLoginForm';
+import GasDataForm from './src/views/GasDataForm';
 
 const App = () => {
   return (
@@ -57,6 +58,7 @@ const App = () => {
         <Scene key="loginusers" component={LoginUsers} hideNavBar={true} title="LoginUsers"/>
         <Scene key="userslogged" component={UsersLogged} hideNavBar={true} title="UsersLogged"/>
         <Scene key="newuserloginform" component={NewUserLoginForm} hideNavBar={true} title="NewUserLoginForm"/>
+        <Scene key="gasdataform" component={GasDataForm} hideNavBar={true} title="GasDataForm"/>
     	</Scene>
     </Router>
   );
