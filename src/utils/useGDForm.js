@@ -50,6 +50,7 @@ const useGDForm = (callback) => {
 				VALUES(?,?,?,?)
 				`;
 			}else if (action == 'edit'){
+				inputs.id = "1";
 				messageVerb='Actualizado';
 				query =`
 					UPDATE datosgas set preciosuper=?,precioregular=?,preciodiesel=?,bombas=?

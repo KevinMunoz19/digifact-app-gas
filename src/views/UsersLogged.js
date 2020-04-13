@@ -23,13 +23,15 @@ const UsersLogged = () =>{
     const [pdfSource,setPdfSource] = useState(null);
     const [dteList,setDteList] = useState([]);
     const [loading,setLoading] = useState(false);
-    const {select} = DB();
+    const {select,insert} = DB();
 
 		const [usersList,setUsersList] = useState([]);
 
 
 		const [us,setUs] = useState('');
 		const [pass,setPass] = useState('');
+
+		const [visibleButton,setVisibleButton] = useState(false);
 
 
 
@@ -55,9 +57,38 @@ const UsersLogged = () =>{
 			})
 		}
 
-		function h() {
+		useEffect(()=>{
+			var queryb = `select * from loginusers where logged_in = "1"`;
+			select(queryb,[],(res)=>{
+				var admin = res[0].permiso.toString();
+				console.log("Permiso usuario query")
+				console.log(typeof admin)
+				console.log(admin)
 
-	}
+				if (admin == "1"){
+					setVisibleButton(true);
+				} else {
+					setVisibleButton(false);
+				}
+
+			})
+
+		},[])
+
+		function logout() {
+			console.log("Entrada logout")
+
+				var queryup = `
+					UPDATE loginusers set logged_in = "0" where  logged_in = "1"
+					`;
+					insert(queryup,[],(result)=>{
+						console.log('Update Completado',result);
+					})
+
+					Actions.loginusers();
+
+
+		}
 
 
 
@@ -94,10 +125,19 @@ const UsersLogged = () =>{
 								</View>
 
 								<View style={styles.buttonContainer}>
+								{visibleButton &&
 									<TouchableOpacity style={styles.button} onPress={()=>Actions.gasdataform()}>
 										<Text style={styles.buttonText}>Datos Gasolinera</Text>
 									</TouchableOpacity>
+								}
 								</View>
+
+								<View style={styles.buttonContainer}>
+									<TouchableOpacity style={styles.button} onPress={logout}>
+										<Text style={styles.buttonText}>Cerrar Sesion</Text>
+									</TouchableOpacity>
+								</View>
+
 
 
 

@@ -141,6 +141,8 @@ const Dte = () =>{
 		getUser((userInfo)=>{
 			setUser(userInfo);
 		})
+
+
 	},[])
 
 	useEffect(()=>{
@@ -151,10 +153,45 @@ const Dte = () =>{
 	function addGas() {
 		var gasproduct = { price: 25, code: 'Super', name: 'Super', id: 150, quantity: 1 };
 		setProducts([...products,gasproduct]);
+
+		var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
+		getInfo(newnitfetch, (nom)=>{
+			setNn(nom.toString())
+		},(ca)=>{
+			setCalle(ca.toString())
+		},
+		(dir)=>{
+			setDireccion(dir.toString())
+		},
+		(zon)=>{
+			setZona(zon.toString())
+		},
+		(fr)=>{
+			setFrases(fr.toString())
+		},
+		(af)=>{
+			setAfiliacion(af.toString())
+		},
+		(zpc)=>{
+			setZipc(zpc.toString())
+		},
+		(nomc)=>{
+			setNombreComercial(nomc.toString())
+		},
+		(dirc)=>{
+			setDireccionComercial(dirc.toString())
+		},
+		(err)=>{
+			if(err==200){
+				Alert.alert('Error de conexion');
+			}else{
+				Alert.alert(err);
+			}
+		});
 	}
 
 	useEffect(()=>{
-			var querybombas = `select * from datosgas`;
+			var querybombas = `select * from datosgas where id = 1`;
 			select(querybombas,[],(dg)=>{
 				console.log(dg);
 				//setDatosGas(dtes);
@@ -213,41 +250,43 @@ const Dte = () =>{
 			if(productModalVisible) setProductModalVisible(false);
 		},500)
 		setProducts([...products,product]);
-		var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
 
-		getInfo(newnitfetch, (nom)=>{
-			setNn(nom.toString())
-		},(ca)=>{
-			setCalle(ca.toString())
-		},
-		(dir)=>{
-			setDireccion(dir.toString())
-		},
-		(zon)=>{
-			setZona(zon.toString())
-		},
-		(fr)=>{
-			setFrases(fr.toString())
-		},
-		(af)=>{
-			setAfiliacion(af.toString())
-		},
-		(zpc)=>{
-			setZipc(zpc.toString())
-		},
-		(nomc)=>{
-			setNombreComercial(nomc.toString())
-		},
-		(dirc)=>{
-			setDireccionComercial(dirc.toString())
-		},
-		(err)=>{
-			if(err==200){
-				Alert.alert('Error de conexion');
-			}else{
-				Alert.alert(err);
-			}
-		});
+
+
+		 var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
+		 getInfo(newnitfetch, (nom)=>{
+		 	setNn(nom.toString())
+		 },(ca)=>{
+		 	setCalle(ca.toString())
+		 },
+		 (dir)=>{
+		 	setDireccion(dir.toString())
+		 },
+		 (zon)=>{
+		 	setZona(zon.toString())
+		 },
+		 (fr)=>{
+		 	setFrases(fr.toString())
+		 },
+		 (af)=>{
+		 	setAfiliacion(af.toString())
+		 },
+		 (zpc)=>{
+		 	setZipc(zpc.toString())
+		 },
+		 (nomc)=>{
+		 	setNombreComercial(nomc.toString())
+		 },
+		 (dirc)=>{
+		 	setDireccionComercial(dirc.toString())
+		 },
+		 (err)=>{
+		 	if(err==200){
+		 		Alert.alert('Error de conexion');
+		 	}else{
+		 		Alert.alert(err);
+		 	}
+		 });
 	}
 
 	const onProductRemove = (productToRemove)=>{
@@ -266,6 +305,9 @@ const Dte = () =>{
 
 	const onGenerate = ()=>{
 		setLoading(true);
+
+
+
 		if (user) {
 			if (email.trim().length > 0 ? validateEmail(email) : true){
 				if (products.length > 0) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Actions } from 'react-native-router-flux';
 import Icon from "react-native-vector-icons/MaterialIcons";
+import IosHeader from '../components/IosHeader';
 
 
 import {
@@ -40,6 +41,7 @@ const NewUserLoginForm = () => {
 
   return (
   	<ScrollView style={styles.scrollContainer}>
+		<IosHeader textHeader={'DTE'}/>
     	<View style={styles.container}>
         <View style={styles.logoRow}>
         	<Image source={require('../img/logo.png')} style={styles.logo}/>

@@ -64,7 +64,7 @@ const LoginUsers = () =>{
 					setLoading(false);
 
 					var queryup = `
-						UPDATE loginusers set logged_in = "1" where codigo_usuario = "123"
+						UPDATE loginusers set logged_in = "1" where codigo_usuario = "${username.trim()}"
 						`;
 						insert(queryup,[],(result)=>{
 							console.log('Update Completado',result);
