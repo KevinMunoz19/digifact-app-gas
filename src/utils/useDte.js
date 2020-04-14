@@ -16,6 +16,10 @@ const useDte = (props) => {
   const [frases,setFrases] = useState('');
   const [afiliacion,setAfiliacion] = useState('');
 
+  const [idpSuper,setIdpSuper] = useState(4.7);
+	const [idpRegular,setIdpRegular] = useState(4.6);
+	const [idpDiesel,setIdpDiesel] = useState(1.3);
+
   const cancelDte = (user,dteInfo,res,rej)=>{
     console.warn(dteInfo.date);
     var tzoffset = (new Date()).getTimezoneOffset()*60000;
@@ -157,10 +161,10 @@ const useDte = (props) => {
           <dte:Frase TipoFrase="${tipo}" CodigoEscenario="${escenario}"/>
           `;
       });
-    return {
+      return {
         frasesString,
+      }
     }
-  }
 
 
   const generateEmailString = (user,doc,email,res,rej)=>{
@@ -236,6 +240,7 @@ const useDte = (props) => {
 	  var totalTaxAmount = 0;
     var totalIdpAmount
     var itemsString = ``;
+    var updatedItemsString = ``;
     if(iva > 0 ){
       var taxShortName = 'IVA';
       var taxCodeNumber = 1;
@@ -244,15 +249,13 @@ const useDte = (props) => {
       var taxCodeNumber = 2;
     }
     products.forEach((product,i)=>{
-      //buscar tipo de bien o servicio
-      // buscar tipos de medidas
-
-
-
 
       var taxableAmount = iva == 0?(product.price * product.quantity) : (product.price / ((iva * 0.01) + 1)) * product.quantity;
       var taxAmount = (iva * 0.01) * taxableAmount;
       var totalItemAmount = product.price * product.quantity;
+
+
+
 
       var productName = product.name;
       totalAmount += totalItemAmount;
@@ -279,6 +282,28 @@ const useDte = (props) => {
         `;
       });
 
+      updatedItemsString = updatedItemsString+
+        `
+        <dte:Item NumeroLinea="${i+1}" BienOServicio="B">
+          <dte:Cantidad>${product.quantity}</dte:Cantidad>
+          <dte:UnidadMedida>GAL</dte:UnidadMedida>
+          <dte:Descripcion>PREMIUM</dte:Descripcion>
+          <dte:PrecioUnitario>${product.price}</dte:PrecioUnitario>
+          <dte:Precio>${totalItemAmount.toFixed(2)}</dte:Precio>
+          <dte:Descuento>0</dte:Descuento>
+          <dte:Impuestos>
+            <dte:Impuesto>
+              <dte:NombreCorto>${taxShortName}</dte:NombreCorto>
+              <dte:CodigoUnidadGravable>${taxCodeNumber}</dte:CodigoUnidadGravable>
+              <dte:MontoGravable>${taxableAmount.toFixed(2)}</dte:MontoGravable>
+              <dte:MontoImpuesto>${taxAmount.toFixed(2)}</dte:MontoImpuesto>
+            </dte:Impuesto>
+          </dte:Impuestos>
+          <dte:Total>${totalItemAmount.toFixed(2)}</dte:Total>
+        </dte:Item>
+        `;
+
+
 
 
       return {
@@ -295,14 +320,33 @@ const useDte = (props) => {
 	    var itemsString = ``;
       var totalIdpAmount = 0;
         products.forEach((product,i)=>{
+          if (product.code == 'Super' || product.code == 'Regular' || product.code == 'Diesel') {
 
-          if (product.code == 'Super') {
-            var totalItemIdpAmount = product.quantity * idpSuper;
+            if (product.code == 'Super'){
+              var idpGas = idpSuper;
+            } else if (product.code == 'Regular'){
+              var idpGas = idpRegular;
+            } else {
+              var idpGas = idpDiesel;
+            }
+
+            //var totalItemIdpAmount = product.quantity * idpSuper;
+            var totalItemIdpAmount = product.quantity * idpGas;
             var totalItemAmount = product.price * product.quantity;
-
+            var itemBeforeIva = totalItemAmount - totalItemIdpAmount;
+            console.log("Venta con iva precio");
+            console.log(itemBeforeIva);
+            var taxableAmount = iva == 0?(itemBeforeIva) : ((itemBeforeIva/product.quantity) / ((iva * 0.01) + 1)) * product.quantity;
+            var taxAmount = (iva * 0.01) * taxableAmount;
+            console.log("Precio sin IVA MontoGravable");
+            console.log(taxableAmount);
+            console.log("IVA monto impuesto iva");
+            console.log(taxAmount);
             totalAmount += totalItemAmount;
             totalIdpAmount += totalItemIdpAmount;
-          }else{
+            totalTaxAmount += taxAmount;
+          }
+          else{
             var taxableAmount = iva == 0?(product.price * product.quantity) : (product.price / ((iva * 0.01) + 1)) * product.quantity;
             var taxAmount = (iva * 0.01) * taxableAmount;
             var totalItemAmount = product.price * product.quantity;

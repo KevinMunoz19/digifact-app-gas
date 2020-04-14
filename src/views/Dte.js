@@ -102,12 +102,22 @@ const Dte = () =>{
 	const [idpSuper,setIdpSuper] = useState(4.7);
 	const [idpRegular,setIdpRegular] = useState(4.6);
 	const [idpDiesel,setIdpDiesel] = useState(1.3);
+
+	const [precioSuper,setPrecioSuper] = useState(0.0);
+	const [precioRegular,setPrecioRegular] = useState(0.0);
+	const [precioDiesel,setPrecioDiesel] = useState(0.0);
+
 	const [bombas,setBombas] = useState([]);
 
 	const [datosGas,setDatosGas] = useState([]);
 
 	const [gasType, setGasType] = useState("");
 	const [bombNumber, setBombNumber] = useState("");
+
+	const [cantidadGalones,setCantidadGalones] = useState(0);
+
+	const [gasPrice,setGasPrice] = useState(0);
+	const [idpGas,setIdpGas] = useState(0);
 
 
 	const radioProps = [
@@ -151,43 +161,65 @@ const Dte = () =>{
 	},[user])
 
 	function addGas() {
-		var gasproduct = { price: 25, code: 'Super', name: 'Super', id: 150, quantity: 1 };
-		setProducts([...products,gasproduct]);
+		console.log("Cantidad de Galones")
+		console.log(cantidadGalones)
 
-		var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
-		getInfo(newnitfetch, (nom)=>{
-			setNn(nom.toString())
-		},(ca)=>{
-			setCalle(ca.toString())
-		},
-		(dir)=>{
-			setDireccion(dir.toString())
-		},
-		(zon)=>{
-			setZona(zon.toString())
-		},
-		(fr)=>{
-			setFrases(fr.toString())
-		},
-		(af)=>{
-			setAfiliacion(af.toString())
-		},
-		(zpc)=>{
-			setZipc(zpc.toString())
-		},
-		(nomc)=>{
-			setNombreComercial(nomc.toString())
-		},
-		(dirc)=>{
-			setDireccionComercial(dirc.toString())
-		},
-		(err)=>{
-			if(err==200){
-				Alert.alert('Error de conexion');
-			}else{
-				Alert.alert(err);
+		if (cantidadGalones <= 0.0 || !gasType || !bombNumber){
+			Alert.alert('Verifica los datos!', 'Ingresar Datos De Venta de Combustible');
+		} else {
+			if (gasType == "Super"){
+				var gasproduct = { price: precioSuper+idpSuper, code: gasType, name: gasType, id: 150, quantity: cantidadGalones };
+			} else if (gasType == "Regular") {
+				var gasproduct = { price: precioRegular+idpRegular, code: gasType, name: gasType, id: 150, quantity: cantidadGalones };
+			} else {
+				var gasproduct = { price: precioDiesel+idpDiesel, code: gasType, name: gasType, id: 150, quantity: cantidadGalones };
 			}
-		});
+
+			console.log("Precio DB");
+			console.log(gasproduct);
+			setProducts([...products,gasproduct]);
+			var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
+			getInfo(newnitfetch, (nom)=>{
+				setNn(nom.toString())
+			},(ca)=>{
+				setCalle(ca.toString())
+			},
+			(dir)=>{
+				setDireccion(dir.toString())
+			},
+			(zon)=>{
+				setZona(zon.toString())
+			},
+			(fr)=>{
+				setFrases(fr.toString())
+			},
+			(af)=>{
+				setAfiliacion(af.toString())
+			},
+			(zpc)=>{
+				setZipc(zpc.toString())
+			},
+			(nomc)=>{
+				setNombreComercial(nomc.toString())
+			},
+			(dirc)=>{
+				setDireccionComercial(dirc.toString())
+			},
+			(err)=>{
+				if(err==200){
+					Alert.alert('Error de conexion');
+				}else{
+					Alert.alert(err);
+				}
+			});
+
+
+		}
+
+
+
+
+
 	}
 
 	useEffect(()=>{
@@ -201,11 +233,9 @@ const Dte = () =>{
 				setBombas(nb);
 				console.log("array de bombas");
 				console.log(nb);
-
-
-				setIdpSuper(dg[0].preciosuper);
-				setIdpRegular(dg[0].precioregular);
-				setIdpDiesel(dg[0].preciodiesel);
+				setPrecioSuper(dg[0].preciosuper);
+				setPrecioRegular(dg[0].precioregular);
+				setPrecioDiesel(dg[0].preciodiesel);
 
 			})
 	},[])
@@ -607,6 +637,7 @@ const Dte = () =>{
 						<View style={{width:'100%',height:'30%',marginTop:'5%', alignItems:'center'}}>
 							{/* Fila 3: email */}
 							<TextInput
+								onChangeText={(e)=>{setCantidadGalones(e)}}
 								placeholder="Galones"
 								placeholderTextColor="black"
 								style={styles.inputBorder}
