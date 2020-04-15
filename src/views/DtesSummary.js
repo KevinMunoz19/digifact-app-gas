@@ -49,6 +49,8 @@ const Dtes = () =>{
 		useEffect(()=>{
         var query = `select * from dte where payment = 0`;
         select(query,[],(dtes)=>{
+					console.log("documentos efectivo idp");
+					console.log(dtes[0].cantidadgalones);
             setDteListCash(dtes);
         })
     },[])
@@ -56,6 +58,8 @@ const Dtes = () =>{
     useEffect(()=>{
         var queryc = `select * from dte where payment = 1`;
         select(queryc,[],(dtesc)=>{
+					console.log("documentos cheque idp");
+					console.log(dtesc[0].cantidadgalones);
             setDteListCheck(dtesc);
         })
     },[])
@@ -63,6 +67,8 @@ const Dtes = () =>{
 		useEffect(()=>{
         var queryt = `select * from dte where payment = 2`;
         select(queryt,[],(dtest)=>{
+					console.log("documentos tarjeta");
+					console.log(dtest);
             setDteListCard(dtest);
         })
     },[])

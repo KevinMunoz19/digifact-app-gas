@@ -15,7 +15,8 @@ import {
 	Image,
 	ImageBackground,
     ActivityIndicator,
-    Modal
+    Modal,
+    ScrollView,
 }	from 'react-native';
 
 /*
@@ -55,6 +56,7 @@ const Home = () => {
 	}
 
     return (
+      <ScrollView style={{backgroundColor:'white'}}>
         <View style={styles.container}>
             <Modal transparent={true} style={styles.modal} visible={menuVisible}>
                 <View style={styles.menuContainer}>
@@ -117,9 +119,13 @@ const Home = () => {
                 <TouchableOpacity onPress={()=>handlePress('loginusers')} style={styles.sectionTouch}>
           <Text style={styles.sectionTouchText}>Login Usuario</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={()=>handlePress('dtessummary')} style={styles.sectionTouch}>
+          <Text style={styles.sectionTouchText}>Resumen de Facturas</Text>
+        </TouchableOpacity>
 
             </ImageBackground>
         </View>
+    </ScrollView>
     );
 };
 

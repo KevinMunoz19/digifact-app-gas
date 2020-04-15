@@ -51,8 +51,8 @@ const useDte = (props) => {
     })
   }
 
-    const generateString = (products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion, zipcode, nombreComercial, direccionComercial,numeroEstablecimiento,payment, res,rej)=>{
-        var {itemsString,totalAmount,totalTaxAmount } = generateItemString(products,client,cf,iva);
+    const generateString = (products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion, zipcode, nombreComercial, direccionComercial,numeroEstablecimiento,payment,idpSuper,idpRegular,idpDiesel,numerobomba,tipogasolina,cantidadgalones, res,rej)=>{
+        var {itemsString,totalAmount,totalTaxAmount,totalIdpAmount } = generateItemString(products,client,cf,iva,idpSuper,idpRegular,idpDiesel);
         var issueNit=user.string_nit.replace(/0+(?!$)/,'');
         //var issueNit=user.string_nit;
         var {frasesString} = generateFrasesString(frases);
@@ -88,6 +88,25 @@ const useDte = (props) => {
         }else{
             var taxShortName = 'CERO';
         }
+
+
+
+        console.log(`total IDP en GenerateString es ${totalIdpAmount}`);
+        if (totalIdpAmount > 0){
+          var impuestosString =
+          `
+          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${totalTaxAmount.toFixed(5)}"/>
+          <dte:TotalImpuesto NombreCorto="PETROLEO" TotalMontoImpuesto="${totalIdpAmount.toFixed(5)}"/>
+          `;
+
+        }else{
+          var impuestosString =
+          `
+          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${totalTaxAmount.toFixed(2)}"/>
+          `;
+
+        }
+
         var xmlString =
         `
         <?xml version='1.0' encoding='UTF-8'?>
@@ -127,9 +146,9 @@ const useDte = (props) => {
                         </dte:Items>
                         <dte:Totales>
                             <dte:TotalImpuestos>
-                                <dte:TotalImpuesto NombreCorto="${taxShortName}" TotalMontoImpuesto="${totalTaxAmount.toFixed(2)}"/>
+                              ${impuestosString}
                             </dte:TotalImpuestos>
-                            <dte:GranTotal>${totalAmount}</dte:GranTotal>
+                            <dte:GranTotal>${totalAmount.toFixed(5)}</dte:GranTotal>
                         </dte:Totales>
                     </dte:DatosEmision>
                 </dte:DTE>
@@ -140,7 +159,7 @@ const useDte = (props) => {
         console.log(xmlString);
         sendBill(xmlString,user.string_nit,user.token,(response)=>{
             console.log(response.ResponseDATA3);
-            saveDte(response.ResponseDATA1,receiverName,receiverNit,payment);
+            saveDte(response.ResponseDATA1,receiverName,receiverNit,payment,numerobomba,tipogasolina,totalIdpAmount,cantidadgalones);
             res(response.ResponseDATA3)
         },(err)=>{
             rej(err);
@@ -213,7 +232,7 @@ const useDte = (props) => {
       })
   }
 
-  const saveDte = (encode,receiverName,receiverNit,payment)=>{
+  const saveDte = (encode,receiverName,receiverNit,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones)=>{
     let xmlString = base64.decode(encode);
     let xml = new DOMParser().parseFromString(xmlString, "text/xml").documentElement;
     var authNumberTag = xml.getElementsByTagName("dte:NumeroAutorizacion")[0];
@@ -225,8 +244,10 @@ const useDte = (props) => {
     var fecha = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1).replace("T"," ");
     //var fechaformated = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1).split('T')[0];
     //var query =    `INSERT INTO dte(receiver_name,receiver_nit,date,amount,serie,number,auth_number) values (?,?,DATETIME('now'),?,?,?,?)`;
-    var query =    `INSERT INTO dte(receiver_name,receiver_nit,date,amount,serie,number,auth_number,payment) values (?,?,?,?,?,?,?,?)`;
-    insert(query,[receiverName,receiverNit,fecha,total,serie,dteNumber,authNumber,payment],(result)=>{
+
+
+    var query =    `INSERT INTO dte(receiver_name,receiver_nit,date,amount,serie,number,auth_number,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones) values (?,?,?,?,?,?,?,?,?,?,?,?)`;
+    insert(query,[receiverName,receiverNit,fecha,total,serie,dteNumber,authNumber,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones],(result)=>{
       console.log('DTE registrado con exito');
     },(err)=>{
       console.log('ocurrio un error registrando el dte', err);
@@ -234,12 +255,13 @@ const useDte = (props) => {
       //console.log('otros' ,authNumber,dteNumber,serie);
   }
 
-  const generateItemString = (products,client,cf,iva)=>{
+  const generateItemString = (products,client,cf,iva,idpSuper,idpRegular,idpDiesel)=>{
 
     var totalAmount = 0;
 	  var totalTaxAmount = 0;
-    var totalIdpAmount
+    var totalIdpAmount = 0;
     var itemsString = ``;
+
     var updatedItemsString = ``;
     if(iva > 0 ){
       var taxShortName = 'IVA';
@@ -250,66 +272,115 @@ const useDte = (props) => {
     }
     products.forEach((product,i)=>{
 
-      var taxableAmount = iva == 0?(product.price * product.quantity) : (product.price / ((iva * 0.01) + 1)) * product.quantity;
-      var taxAmount = (iva * 0.01) * taxableAmount;
-      var totalItemAmount = product.price * product.quantity;
+
+      ///
+      if (product.code == 'Super' || product.code == 'Regular' || product.code == 'Diesel') {
+        var unidadMedida = "GAL";
+        if (product.code == 'Super'){
+          var productName = "PREMIUM";
+          var idpGas = idpSuper;
+          var precioUnitario = product.price - idpSuper;
+          var codigoUnidadGravable = "1";
+        } else if (product.code == 'Regular'){
+          var productName = "PLUS";
+          var idpGas = idpRegular;
+          var precioUnitario = product.price - idpRegular;
+          var codigoUnidadGravable = "2";
+        } else {
+          var productName = "TECDIESEL";
+          var idpGas = idpDiesel;
+          var precioUnitario = product.price - idpDiesel;
+          var codigoUnidadGravable = "4";
+        }
+
+
+        var totalItemIdpAmount = product.quantity * idpGas;
+        var totalItemAmount = product.price * product.quantity;
+        var itemBeforeIva = totalItemAmount - totalItemIdpAmount;
+        console.log("Venta con iva precio");
+        console.log(itemBeforeIva);
+        var taxableAmount = iva == 0?(itemBeforeIva) : ((itemBeforeIva/product.quantity) / ((iva * 0.01) + 1)) * product.quantity;
+        var taxAmount = (iva * 0.01) * taxableAmount;
+        console.log("Precio sin IVA MontoGravable");
+        console.log(taxableAmount);
+        console.log("IVA monto impuesto iva");
+        console.log(taxAmount);
+        totalAmount += totalItemAmount;
+        totalIdpAmount += totalItemIdpAmount;
+        totalTaxAmount += taxAmount;
+        var precioXML = itemBeforeIva.toFixed(5);
+        var taxesString = ``;
+        taxesString = taxesString+
+        `
+        <dte:Impuesto>
+          <dte:NombreCorto>IVA</dte:NombreCorto>
+          <dte:CodigoUnidadGravable>${taxCodeNumber}</dte:CodigoUnidadGravable>
+          <dte:MontoGravable>${taxableAmount.toFixed(5)}</dte:MontoGravable>
+          <dte:MontoImpuesto>${taxAmount.toFixed(5)}</dte:MontoImpuesto>
+        </dte:Impuesto>
+        <dte:Impuesto>
+          <dte:NombreCorto>PETROLEO</dte:NombreCorto>
+          <dte:CodigoUnidadGravable>${codigoUnidadGravable.trim()}</dte:CodigoUnidadGravable>
+          <dte:CantidadUnidadesGravables>${product.quantity}</dte:CantidadUnidadesGravables>
+          <dte:MontoImpuesto>${totalItemIdpAmount.toFixed(5)}</dte:MontoImpuesto>
+        </dte:Impuesto>
+        `;
 
 
 
+      } else {
+        var precioUnitario = product.price;
+        var unidadMedida = "CA";
+        var productName = product.name;
+        var taxableAmount = iva == 0?(product.price * product.quantity) : (product.price / ((iva * 0.01) + 1)) * product.quantity;
+        var taxAmount = (iva * 0.01) * taxableAmount;
+        var totalItemAmount = product.price * product.quantity;
+        totalAmount += totalItemAmount;
+        totalTaxAmount += taxAmount;
+        var precioXML = totalItemAmount.toFixed(5);
+        var taxesString = ``;
+        taxesString = taxesString+
+        `
+        <dte:Impuesto>
+          <dte:NombreCorto>IVA</dte:NombreCorto>
+          <dte:CodigoUnidadGravable>${taxCodeNumber}</dte:CodigoUnidadGravable>
+          <dte:MontoGravable>${taxableAmount.toFixed(5)}</dte:MontoGravable>
+          <dte:MontoImpuesto>${taxAmount.toFixed(5)}</dte:MontoImpuesto>
+        </dte:Impuesto>
+        `;
 
-      var productName = product.name;
-      totalAmount += totalItemAmount;
-      totalTaxAmount += taxAmount;
+
+
+      }
+      ///
+
       itemsString = itemsString+
         `
         <dte:Item NumeroLinea="${i+1}" BienOServicio="B">
           <dte:Cantidad>${product.quantity}</dte:Cantidad>
-          <dte:UnidadMedida>CA</dte:UnidadMedida>
+          <dte:UnidadMedida>${unidadMedida}</dte:UnidadMedida>
           <dte:Descripcion>${productName.trim()}</dte:Descripcion>
-          <dte:PrecioUnitario>${product.price}</dte:PrecioUnitario>
-          <dte:Precio>${totalItemAmount.toFixed(2)}</dte:Precio>
+          <dte:PrecioUnitario>${precioUnitario}</dte:PrecioUnitario>
+          <dte:Precio>${precioXML}</dte:Precio>
           <dte:Descuento>0</dte:Descuento>
           <dte:Impuestos>
-            <dte:Impuesto>
-              <dte:NombreCorto>${taxShortName}</dte:NombreCorto>
-              <dte:CodigoUnidadGravable>${taxCodeNumber}</dte:CodigoUnidadGravable>
-              <dte:MontoGravable>${taxableAmount.toFixed(2)}</dte:MontoGravable>
-              <dte:MontoImpuesto>${taxAmount.toFixed(2)}</dte:MontoImpuesto>
-            </dte:Impuesto>
+            ${taxesString}
           </dte:Impuestos>
-          <dte:Total>${totalItemAmount.toFixed(2)}</dte:Total>
+          <dte:Total>${totalItemAmount.toFixed(5)}</dte:Total>
         </dte:Item>
         `;
+
+
+
+
+
       });
-
-      updatedItemsString = updatedItemsString+
-        `
-        <dte:Item NumeroLinea="${i+1}" BienOServicio="B">
-          <dte:Cantidad>${product.quantity}</dte:Cantidad>
-          <dte:UnidadMedida>GAL</dte:UnidadMedida>
-          <dte:Descripcion>PREMIUM</dte:Descripcion>
-          <dte:PrecioUnitario>${product.price}</dte:PrecioUnitario>
-          <dte:Precio>${totalItemAmount.toFixed(2)}</dte:Precio>
-          <dte:Descuento>0</dte:Descuento>
-          <dte:Impuestos>
-            <dte:Impuesto>
-              <dte:NombreCorto>${taxShortName}</dte:NombreCorto>
-              <dte:CodigoUnidadGravable>${taxCodeNumber}</dte:CodigoUnidadGravable>
-              <dte:MontoGravable>${taxableAmount.toFixed(2)}</dte:MontoGravable>
-              <dte:MontoImpuesto>${taxAmount.toFixed(2)}</dte:MontoImpuesto>
-            </dte:Impuesto>
-          </dte:Impuestos>
-          <dte:Total>${totalItemAmount.toFixed(2)}</dte:Total>
-        </dte:Item>
-        `;
-
-
-
 
       return {
         itemsString,
         totalAmount,
-        totalTaxAmount
+        totalTaxAmount,
+        totalIdpAmount,
       }
     }
 
@@ -355,9 +426,9 @@ const useDte = (props) => {
           }
 
         });
-        setTotal(totalAmount.toFixed(2).toLocaleString('USD'));
-        setSubTotal((totalAmount - totalTaxAmount - totalIdpAmount).toFixed(2).toLocaleString('USD'));
-        setIdpTotal(totalIdpAmount.toFixed(2).toLocaleString('USD'));
+        setTotal(totalAmount.toFixed(5).toLocaleString('USD'));
+        setSubTotal((totalAmount - totalTaxAmount - totalIdpAmount).toFixed(5).toLocaleString('USD'));
+        setIdpTotal(totalIdpAmount.toFixed(5).toLocaleString('USD'));
     }
 
     return {

@@ -20,13 +20,10 @@ import {
 	requireNativeComponent,
 	NativeModules,
 	NativeEventEmitter,
-
-
 }	from 'react-native';
 
 
 import AppLink from 'react-native-app-link';
-
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {Actions} from 'react-native-router-flux';
@@ -212,14 +209,7 @@ const Dte = () =>{
 					Alert.alert(err);
 				}
 			});
-
-
 		}
-
-
-
-
-
 	}
 
 	useEffect(()=>{
@@ -236,10 +226,8 @@ const Dte = () =>{
 				setPrecioSuper(dg[0].preciosuper);
 				setPrecioRegular(dg[0].precioregular);
 				setPrecioDiesel(dg[0].preciodiesel);
-
 			})
 	},[])
-
 
 
 	const onClientSelect = (client)=>{
@@ -280,9 +268,6 @@ const Dte = () =>{
 			if(productModalVisible) setProductModalVisible(false);
 		},500)
 		setProducts([...products,product]);
-
-
-
 		 var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
 		 getInfo(newnitfetch, (nom)=>{
 		 	setNn(nom.toString())
@@ -336,14 +321,12 @@ const Dte = () =>{
 	const onGenerate = ()=>{
 		setLoading(true);
 
-
-
 		if (user) {
 			if (email.trim().length > 0 ? validateEmail(email) : true){
 				if (products.length > 0) {
 					if((!cf && client.nit.trim().length > 0) || cf) {
 						if(iva == 0 || iva == 12){
-							generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial, direccionComercial, numEstablecimiento,payment, (res)=>{
+							generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial, direccionComercial, numEstablecimiento,payment,idpSuper,idpRegular,idpDiesel,bombNumber, gasType, cantidadGalones, (res)=>{
 							//generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial,direccionComercial, (res)=>{
 								console.log("productos");
 								console.log(typeof products)
