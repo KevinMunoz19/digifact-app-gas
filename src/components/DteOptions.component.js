@@ -1,24 +1,25 @@
 import React, {useState} from 'react';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    Button,
-    View,
-    SafeAreaView,
-    TextInput,
-    TouchableOpacity
-  } from 'react-native';
+  ScrollView,
+  StyleSheet,
+  Text,
+  Button,
+  View,
+  SafeAreaView,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const DteOptions = ({
-    isVisible,
-    onViewDte,
-    onCancelDte,
-    onReprintDte,
-    onCloseModal,
-    dteStatus,
+  isVisible,
+  onViewDte,
+  onCancelDte,
+  onReprintDte,
+  onCloseModal,
+  dteStatus,
+  onEmailDte,
 }) => {
     return(
         <View style={styles.container}>
@@ -41,6 +42,11 @@ const DteOptions = ({
             {(dteStatus == 1 ) &&
             <TouchableOpacity  onPress={()=>onCancelDte()} style={styles.sectionTouch}>
                 <Text style={styles.sectionTouchText}>ANULAR DOCUMENTO</Text>
+            </TouchableOpacity>
+            }
+            {(dteStatus == 1 ) &&
+            <TouchableOpacity  onPress={()=>onEmailDte()} style={styles.sectionTouch}>
+                <Text style={styles.sectionTouchText}>ENVIAR DOCUMENTO</Text>
             </TouchableOpacity>
             }
             <TouchableOpacity  onPress={()=>onCloseModal()} style={styles.sectionTouch}>
@@ -83,8 +89,9 @@ const styles = StyleSheet.create({
     },
     sectionTouchText:{
         marginBottom:'5%',
+        marginLeft:'5%',
         //marginLeft:'10%',
-        fontSize:40,
+        fontSize:20,
         color:'white'
     }
   });
