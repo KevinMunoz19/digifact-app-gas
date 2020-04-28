@@ -161,7 +161,7 @@ const useApi = ()=>{
           let y = x[0].getElementsByTagName("dte:Cantidad")[0].childNodes[0].nodeValue;
           for (i = 0; i < x.length; i++) {
             let canti = x[i].getElementsByTagName("dte:Cantidad")[0].childNodes[0].nodeValue;
-            let preci = x[i].getElementsByTagName("dte:Precio")[0].childNodes[0].nodeValue;
+            let preci = x[i].getElementsByTagName("dte:PrecioUnitario")[0].childNodes[0].nodeValue;
             let descri = x[i].getElementsByTagName("dte:Descripcion")[0].childNodes[0].nodeValue;
             cantidades = cantidades+`${canti},`;
             precios = precios+`${preci},`;
