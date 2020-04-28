@@ -63,6 +63,13 @@ const LoginUsers = () =>{
 				if (password == dtes[0].password) {
 					setLoading(false);
 
+					var querylogout = `
+						UPDATE loginusers set logged_in = "0" where  logged_in = "1"
+						`;
+						insert(querylogout,[],(result)=>{
+							console.log('Todos los usuarios logged out',result);
+						})
+
 					var queryup = `
 						UPDATE loginusers set logged_in = "1" where codigo_usuario = "${username.trim()}"
 						`;

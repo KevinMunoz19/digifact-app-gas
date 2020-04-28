@@ -40,7 +40,6 @@ const Home = () => {
   			case 'dtes':Actions.dtes(); break;
         case 'dtessummary':Actions.dtessummary(); break;
         case 'loginusers':Actions.loginusers(); break;
-
   		}
     }
 
@@ -56,7 +55,7 @@ const Home = () => {
 	}
 
     return (
-      <ScrollView style={{backgroundColor:'white'}}>
+
         <View style={styles.container}>
             <Modal transparent={true} style={styles.modal} visible={menuVisible}>
                 <View style={styles.menuContainer}>
@@ -125,101 +124,113 @@ const Home = () => {
 
             </ImageBackground>
         </View>
-    </ScrollView>
+
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-    header:{
-        backgroundColor: 'white',
-        width: '100%',
-        height: '25%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems:'center'
-    },
-    modal:{
-        flex:1,
-        flexDirection:'column'
-    },
-    menuContainer:{
-        width:'70%',
-        height:'50%',
-        backgroundColor:'white'
-    },
-    menuHeaderContainer:{
-        width:'100%',
-        height:'25%',
-        flexDirection:'row'
-    },
-    menuBodyContainer:{
-        width:'100%',
-        height:'75%',
-        flexDirection:'column',
-        backgroundColor:'rgb(119,211,83)',
-        justifyContent: 'space-around'
-    },
-    menuLine:{
-        height:'1%',
-        backgroundColor:'white'
-    },
-    menuLogo:{
-        marginLeft:'10%',
-				width: wp('30%'),//80
-        height: hp('20%'),//
-    },
-    menuText:{
-        fontSize:20,
-        color:'white',
-        marginLeft:'10%'
-    },
-    primaryGray:{
-        flex:1,
-        height:'100%',
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    menuTouch:{
-        justifyContent:'center'
-    },
-    body:{
-        flexDirection: 'column',
-        width:'100%',
-        height:'100%',
-				//alignItems:'center',
+  container: {
+      flex: 1
+  },
+  header:{
+      backgroundColor: 'white',
+      width: '100%',
+      height: '15%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems:'center'
+  },
+  modal:{
+      flex:1,
+      flexDirection:'column'
+  },
+  menuContainer:{
+    width:'100%',
+  //width:'70%',
+  height:'25%',
+      // width:'70%',
+      // height:'30%',
+      backgroundColor:'white'
+  },
+  menuHeaderContainer:{
+      width:'100%',
+      height:'25%',
+      flexDirection:'row'
+  },
+  menuBodyContainer:{
+      width:'100%',
+      height:'75%',
+      flexDirection:'column',
+      backgroundColor:'rgb(119,211,83)',
+      justifyContent: 'space-around'
+  },
+  menuLine:{
+      height:'1%',
+      backgroundColor:'white'
+  },
+  menuLogo:{
+      marginLeft:'10%',
+      width:'80%',
+  height:'100%',
+      // width: wp('30%'),//80
+      // height: hp('10%'),//
+  },
+  menuText:{
+      fontSize:20,
+      color:'white',
+      marginLeft:'5%'
+  },
+  primaryGray:{
+      flex:1,
+      height:'100%',
+      justifyContent:'center',
+      alignItems:'center'
+  },
+  menuTouch:{
+      justifyContent:'center'
+  },
+  body:{
+      flexDirection: 'column',
+      width:'100%',
+      height:'100%',
+      //alignItems:'center',
 
-				//justifyContent:'center',
-    },
-    logo:{
-        width: wp('30%'),
-        height: hp('20%'),
-    },
-    headerIcon:{
-        marginRight: '2%'
-    },
-    sectionTouch:{
-        marginTop:'3%',
-        backgroundColor:'rgba(119,211,83,0.5)',
+      //justifyContent:'center',
+  },
+  logo:{
+    width: '70%',
+  height: '90%'
+      // width: wp('20%'),
+      // height: hp('10%'),
+  },
+  headerIcon:{
+      marginRight: '2%'
+  },
+  sectionTouch:{
+      marginTop:'3%',
+      backgroundColor:'rgba(119,211,83,0.5)',
 
-				width: wp('100%'),
-				height: hp('12%'),
+      width: wp('100%'),
+      height: hp('12%'),
 
-        flexDirection:'row',
-        alignItems:'center',
+  //     width:'100%',
+  // height:'15%',
 
-				justifyContent:'center',
-    },
-    sectionTouchText:{
-        //marginTop:'1%',
-        marginLeft:'10%',
-        fontSize: hp('4%'),
-        color:'white'
-    }
+      flexDirection:'row',
+      alignItems:'center',
 
-});
+      justifyContent:'center',
+  },
+  sectionTouchText:{
+      marginTop:'3%',
+      marginLeft:'5%',
+      // fontSize: hp('3%'),
+      color:'white',
+      fontSize:15,
+  }
+
+  });
+
 
 
 

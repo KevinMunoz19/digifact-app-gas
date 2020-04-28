@@ -8,12 +8,12 @@
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\anim-v21\\mtrl_bottom_sheet_slide_out.xml"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\da036d8bfee70a6a1c4357fe57bcdc4d\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
-    },
-    {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\anim_nav_default_enter_anim.xml.flat",
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\a57971426643e752ee2bdddeed18e756\\res\\anim\\nav_default_enter_anim.xml"
+    },
+    {
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notification_bg_low_pressed.9.png.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\da036d8bfee70a6a1c4357fe57bcdc4d\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_tab_indicator_mtrl_alpha.9.png.flat",
@@ -36,16 +36,16 @@
         "source": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\src\\main\\res\\raw\\app.json"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable-hdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_design_layout_snackbar_include.xml.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\layout\\design_layout_snackbar_include.xml"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_pressed_holo_light.9.png.flat",
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable-xxhdpi-v4\\abc_list_pressed_holo_light.9.png"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_design_layout_snackbar_include.xml.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\layout\\design_layout_snackbar_include.xml"
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable-hdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_btn_radio_on_to_off_mtrl_animation.xml.flat",
@@ -104,36 +104,36 @@
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\layout\\support_simple_spinner_dropdown_item.xml"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_mtrl_chip_close_circle.xml.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\drawable\\ic_mtrl_chip_close_circle.xml"
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_mtrl_card_view_ripple.xml.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\color\\mtrl_card_view_ripple.xml"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_nav_header_home_nav.xml.flat",
         "source": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\src\\main\\res\\layout\\nav_header_home_nav.xml"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_mtrl_card_view_ripple.xml.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\color\\mtrl_card_view_ripple.xml"
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_mtrl_chip_close_circle.xml.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\drawable\\ic_mtrl_chip_close_circle.xml"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_btn_colored_borderless_text_material.xml.flat",
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\color\\abc_btn_colored_borderless_text_material.xml"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_list_divider_material.xml.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable\\abc_list_divider_material.xml"
-    },
-    {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\anim_btn_radio_to_on_mtrl_dot_group_animation.xml.flat",
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\anim\\btn_radio_to_on_mtrl_dot_group_animation.xml"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_mtrl_navigation_item_text_color.xml.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\color\\mtrl_navigation_item_text_color.xml"
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_list_divider_material.xml.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable\\abc_list_divider_material.xml"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable-hdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\color_mtrl_navigation_item_text_color.xml.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\color\\mtrl_navigation_item_text_color.xml"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_btn_switch_to_on_mtrl_00001.9.png.flat",
@@ -144,12 +144,12 @@
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\drawable-xhdpi-v4\\abc_ic_star_half_black_36dp.png"
     },
     {
-        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_screen_simple.xml.flat",
-        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\layout\\abc_screen_simple.xml"
-    },
-    {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_design_bottom_navigation_item.xml.flat",
         "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\06a82f152e6ef65bb0b8d90268c2e4e3\\res\\layout\\design_bottom_navigation_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_screen_simple.xml.flat",
+        "source": "C:\\Users\\kevin\\.gradle\\caches\\transforms-2\\files-2.1\\492266ee8bb5b4c036723b105eaa091a\\res\\layout\\abc_screen_simple.xml"
     },
     {
         "merged": "C:\\Users\\kevin\\github\\digifact-app-gas\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_design_navigation_item_separator.xml.flat",

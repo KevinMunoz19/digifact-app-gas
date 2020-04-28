@@ -182,7 +182,7 @@ ADDED from C:\Users\kevin\github\digifact-app-gas\android\app\src\main\AndroidMa
 activity#com.digifactbeta.MainActivity
 ADDED from C:\Users\kevin\github\digifact-app-gas\android\app\src\main\AndroidManifest.xml:26:9-58:20
 	android:label
-		ADDED from C:\Users\kevin\github\digifact-app-gas\android\app\src\main\AndroidManifest.xml:29:13-41
+		ADDED from C:\Users\kevin\github\digifact-app-gas\android\app\src\main\AndroidManifest.xml:29:13-40
 	android:windowSoftInputMode
 		ADDED from C:\Users\kevin\github\digifact-app-gas\android\app\src\main\AndroidManifest.xml:30:13-55
 	android:configChanges

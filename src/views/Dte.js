@@ -153,7 +153,7 @@ const Dte = () =>{
 	},[])
 
 	useEffect(()=>{
-		console.log('Cambio de user:');
+		//console.log('Cambio de user:');
 		setNumEstablecimiento(0);
 	},[user])
 

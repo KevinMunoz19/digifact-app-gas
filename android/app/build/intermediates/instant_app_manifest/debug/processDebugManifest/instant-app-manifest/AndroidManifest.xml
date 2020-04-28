@@ -44,7 +44,7 @@
         <activity
             android:name="com.digifactbeta.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="DigifactBeta"
+            android:label="DigifactGas"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

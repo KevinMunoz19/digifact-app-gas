@@ -13,7 +13,7 @@ const useApi = ()=>{
     loginOld(body,()=>{
       console.log(body);
       fetch('https://felgtaws.digifact.com.gt/felapi/api/login/get_token',{
-      //fetch('https://felgttestaws.digifact.com.gt/felapi/api/login/get_token',{
+      // fetch('https://felgttestaws.digifact.com.gt/felapi/api/login/get_token',{
         method:'POST',
         body:JSON.stringify(body),
         headers: {
@@ -33,8 +33,8 @@ const useApi = ()=>{
 
 
   const loginOld = (body,res) =>{
-    //return fetch('https://felgtaws.digifact.com.gt/felapi/api/login/get_token',{
-    return fetch('https://felgt.digifact.com.gt/gt.com.fact.felapi/api/login/get_token',{
+    // return fetch('https://felgt.digifact.com.gt/gt.com.fact.felapi/api/login/get_token',{
+    return fetch('https://felgttest.digifact.com.gt/gt.com.fact.felapi/api/login/get_token',{
       method:'POST',
       body:JSON.stringify(body),
       headers: {
@@ -53,7 +53,7 @@ const useApi = ()=>{
     console.log("send bill entrada");
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=CERTIFICATE_DTE_XML_TOSIGN&FORMAT=PDF XML`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=CERTIFICATE_DTE_XML_TOSIGN&FORMAT=PDF XML`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=CERTIFICATE_DTE_XML_TOSIGN&FORMAT=PDF XML`,{
         method:'POST',
         body:body,
         headers: {
@@ -78,7 +78,7 @@ const useApi = ()=>{
     console.log("entrada a cancelar documento");
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=ANULAR_FEL_TOSIGN&FORMAT=PDF`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=ANULAR_FEL_TOSIGN&FORMAT=PDF`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=ANULAR_FEL_TOSIGN&FORMAT=PDF`,{
         method:'POST',
         body:body,
         headers: {
@@ -104,7 +104,7 @@ const useApi = ()=>{
     console.log("Entrada a get bill");
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
         method:'GET',
         headers:{
           'Authorization':token
@@ -130,7 +130,7 @@ const useApi = ()=>{
     console.log("entrada get bill xml");
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=XML&GUID=${id}`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
         method:'GET',
         headers:{
           'Authorization':token
@@ -191,7 +191,7 @@ const useApi = ()=>{
     console.log("Entrada a get bill save")
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/guestapi/api/FELRequest?NIT=${nit}&TIPO=GET_DOCUMENT&FORMAT=PDF&GUID=${id}`,{
         method:'GET',
         headers:{
           'Authorization':token
@@ -215,7 +215,7 @@ const useApi = ()=>{
   const getBillBack = (id,res,rej)=>{
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
         method:'POST',
         body:`<?xml version="1.0" encoding="utf-8"?>
               <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -259,7 +259,7 @@ const useApi = ()=>{
     console.log("send bill email entrada");
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=CERTIFICATE_DTE_XML_TOSIGN&FORMAT=PDF XML`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/felapi/api/FELRequest?NIT=${nit}&TIPO=CERTIFICATE_DTE_XML_TOSIGN&FORMAT=PDF XML`,{
         method:'POST',
         body:body,
         headers: {
@@ -283,7 +283,7 @@ const useApi = ()=>{
     console.log(typeof nit)
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
         method:'POST',
         body:`<?xml version="1.0" encoding="utf-8"?>
               <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -324,7 +324,7 @@ const useApi = ()=>{
     console.log("requestor entry");
     loginOld({username:null,password:null},()=>{
       fetch(`https://felgtaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
-      //fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
+      // fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
         method:'POST',
         body:`<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -372,7 +372,7 @@ const useApi = ()=>{
     console.log("info entry");
       loginOld({username:null,password:null},()=>{
         fetch(`https://felgtaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
-        //fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
+        // fetch(`https://felgttestaws.digifact.com.gt/mx.com.fact.wsfront/factwsfront.asmx`,{
           method:'POST',
           body:`<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
