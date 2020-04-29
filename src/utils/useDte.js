@@ -27,16 +27,16 @@ const useDte = (props) => {
     var body = `
       <?xml version='1.0' encoding='utf-8'?>
         <dte:GTAnulacionDocumento xmlns:dte="http://www.sat.gob.gt/dte/fel/0.1.0"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                Version="0.1">
-                <dte:SAT>
-                    <dte:AnulacionDTE ID="DatosCertificados">
-                        <dte:DatosGenerales ID="DatosAnulacion" NumeroDocumentoAAnular="${dteInfo.auth_number}" NITEmisor="${user.string_nit.replace(/0+(?!$)/,'')}"
-                            IDReceptor="${dteInfo.receiver_nit}" FechaEmisionDocumentoAnular="${new Date(dteInfo.date.replace(' ','T')).toISOString()}"
-                            FechaHoraAnulacion="${localISOTime}" MotivoAnulacion="Anulado"/>
-                    </dte:AnulacionDTE>
-                </dte:SAT>
-            </dte:GTAnulacionDocumento>
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        Version="0.1">
+          <dte:SAT>
+            <dte:AnulacionDTE ID="DatosCertificados">
+                <dte:DatosGenerales ID="DatosAnulacion" NumeroDocumentoAAnular="${dteInfo.auth_number}" NITEmisor="${user.string_nit.replace(/0+(?!$)/,'')}"
+                    IDReceptor="${dteInfo.receiver_nit}" FechaEmisionDocumentoAnular="${new Date(dteInfo.date.replace(' ','T')).toISOString()}"
+                    FechaHoraAnulacion="${localISOTime}" MotivoAnulacion="Anulado"/>
+            </dte:AnulacionDTE>
+          </dte:SAT>
+        </dte:GTAnulacionDocumento>
     `;
     console.log(body);
     cancelBill(user.token,user.string_nit,dteInfo.auth_number,body,()=>{
@@ -54,7 +54,7 @@ const useDte = (props) => {
     const generateString = (products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion, zipcode, nombreComercial, direccionComercial,numeroEstablecimiento,payment,idpSuper,idpRegular,idpDiesel,numerobomba,tipogasolina,cantidadgalones, res,rej)=>{
         var {itemsString,totalAmount,totalTaxAmount,totalIdpAmount } = generateItemString(products,client,cf,iva,idpSuper,idpRegular,idpDiesel);
         var issueNit=user.string_nit.replace(/0+(?!$)/,'');
-        //var issueNit=user.string_nit;
+        var saveNit = user.string_nit;
         var {frasesString} = generateFrasesString(frases);
         var tzoffset = (new Date()).getTimezoneOffset()*60000;
         var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
@@ -62,6 +62,13 @@ const useDte = (props) => {
         var ncArray = nombreComercial.trim().split('|');
         var dcArray = direccionComercial.trim().split('|');
         var dcClean = dcArray[numeroEstablecimiento].replace(/ +(?= )/g,'');
+
+        var nombreComercialClean = ncArray[numeroEstablecimiento].toString().trim();
+
+        while (nombreComercialClean.substring(0,1) == "<" || (nombreComercialClean.substring(0,1) >='0' && nombreComercialClean.substring(0,1) <='9')) {
+          nombreComercialClean = nombreComercialClean.substring(1);
+        }
+
         var num = numeroEstablecimiento+1;
         var numeroEstablecimientoString = num.toString();
         var issueName=user.name;
@@ -116,13 +123,13 @@ const useDte = (props) => {
                     <dte:DatosEmision ID="DatosEmision">
                         <dte:DatosGenerales CodigoMoneda="GTQ" FechaHoraEmision="${localISOTime}" Tipo="FACT"/>
                         <dte:Emisor AfiliacionIVA="${afiliacion}"
-                            NombreComercial="${ncArray[numeroEstablecimiento].substring(3)}"
+                            NombreComercial="${nombreComercialClean}"
                             CodigoEstablecimiento="${numeroEstablecimientoString}"
                             NombreEmisor="${nn}"
                             NITEmisor="${issueNit}">
                             <dte:DireccionEmisor>
-                                <dte:Direccion>${dcClean}</dte:Direccion>
-                                <dte:CodigoPostal>${zcArray[numeroEstablecimiento]}</dte:CodigoPostal>
+                                <dte:Direccion>${dcClean.trim()}</dte:Direccion>
+                                <dte:CodigoPostal>${zcArray[numeroEstablecimiento].trim()}</dte:CodigoPostal>
                                 <dte:Municipio>${issueMunicipality}</dte:Municipio>
                                 <dte:Departamento>${issueDepartment}</dte:Departamento>
                                 <dte:Pais>GT</dte:Pais>
@@ -159,7 +166,8 @@ const useDte = (props) => {
         console.log(xmlString);
         sendBill(xmlString,user.string_nit,user.token,(response)=>{
             console.log(response.ResponseDATA3);
-            saveDte(response.ResponseDATA1,receiverName,receiverNit,payment,numerobomba,tipogasolina,totalIdpAmount,cantidadgalones);
+            saveDte(response.ResponseDATA1,receiverName,receiverNit,payment,numerobomba,tipogasolina,totalIdpAmount,cantidadgalones,saveNit,nn,nombreComercialClean,dcClean);
+            // saveDte(response.ResponseDATA1,receiverName,receiverNit,payment,numerobomba,tipogasolina,totalIdpAmount,cantidadgalones);
             res(response.ResponseDATA3)
         },(err)=>{
             rej(err);
@@ -232,7 +240,61 @@ const useDte = (props) => {
       })
   }
 
-  const saveDte = (encode,receiverName,receiverNit,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones)=>{
+
+
+  const generateEmailStringBox = (user,doc,email,res,rej)=>{
+    // var id = JSON.stringify(doc);
+    // var idjsonstring = id.replace("[","").replace("]","");
+    // var idjson = JSON.parse(id.replace("[","").replace("]",""));
+    // console.log("json parse");
+    // console.log(JSON.parse(id));
+    // console.log("Value");
+    // console.log(idjson.auth_number);
+      var nit = user.string_nit;
+      var guid = doc;
+      var stringdata1 =
+        `
+        <Dictionary name="StoredXmlSelector"><Entry k="Store" v="issued"/><Entry k="IssuerCountryCode" v="GT"/><Entry k="IssuerTaxId" v="${nit}"/><Entry k="DocumentGUID" v="${guid}"/></Dictionary>
+        `;
+      var stringEncoded = base64.encode(stringdata1);
+
+      var stringdata2 =
+        `
+        <Procesamiento><Dictionary name="email"><Entry k="from" v="pruebaemail@documentagface.com"/><Entry k="fromName" v="usuarioTESTdocumentagface"/><Entry k="to" v="${email}"/><Entry k="subject" v="Factura Electronica"/><Entry k="formats" v="pdf"/><Entry k="body template name" v="mail_default_${nit}.html"/></Dictionary></Procesamiento>
+        `;
+      var stringEncoded2 = base64.encode(stringdata2);
+      var xmlStringEmail =
+      `<?xml version="1.0" encoding="utf-8"?>
+      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <soap:Body>
+          <RequestTransaction xmlns="http://www.fact.com.mx/schema/ws">
+          <Requestor>D06A8F37-2D87-43D2-B977-04D503532786</Requestor>
+          <Transaction>QUEUE_FOR_DISTRIBUTION</Transaction>
+          <Country>GT</Country>
+          <Entity>000000123456</Entity>
+          <User>D06A8F37-2D87-43D2-B977-04D503532786</User>
+          <UserName>GT.000000123456.admon</UserName>
+          <Data1>${stringEncoded}</Data1>
+          <Data2>${stringEncoded2}</Data2>
+          <Data3></Data3>
+          </RequestTransaction>
+      </soap:Body>
+      </soap:Envelope>`
+      ;
+      sendemailBill(xmlStringEmail,(response)=>{
+          res(response)
+      },(err)=>{
+          rej(err);
+      })
+  }
+
+
+
+
+
+
+  // const saveDte = (encode,receiverName,receiverNit,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones)=>{
+  const saveDte = (encode,receiverName,receiverNit,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones,issueNit,nnG,nombreComercialG,direccionComercialG)=>{
     let xmlString = base64.decode(encode);
     let xml = new DOMParser().parseFromString(xmlString, "text/xml").documentElement;
     var authNumberTag = xml.getElementsByTagName("dte:NumeroAutorizacion")[0];
@@ -246,8 +308,8 @@ const useDte = (props) => {
     //var query =    `INSERT INTO dte(receiver_name,receiver_nit,date,amount,serie,number,auth_number) values (?,?,DATETIME('now'),?,?,?,?)`;
 
 
-    var query =    `INSERT INTO dte(receiver_name,receiver_nit,date,amount,serie,number,auth_number,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones) values (?,?,?,?,?,?,?,?,?,?,?,?)`;
-    insert(query,[receiverName,receiverNit,fecha,total,serie,dteNumber,authNumber,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones],(result)=>{
+    var query =    `INSERT INTO dte(receiver_name,receiver_nit,date,amount,serie,number,auth_number,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones,string_nit,string_nombre_comercial,string_direccion_comercial,string_nn) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    insert(query,[receiverName,receiverNit,fecha,total,serie,dteNumber,authNumber,payment,numerobomba,tipogasolina,impuestoidp,cantidadgalones,issueNit,nombreComercialG,direccionComercialG,nnG],(result)=>{
       console.log('DTE registrado con exito');
     },(err)=>{
       console.log('ocurrio un error registrando el dte', err);
@@ -436,6 +498,7 @@ const useDte = (props) => {
         generateString,
         cancelDte,
         generateEmailString,
+        generateEmailStringBox,
 	};
 
 }

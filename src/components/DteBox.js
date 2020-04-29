@@ -29,7 +29,7 @@ const printer = NativeModules.PrintModule;
 
 const DteBox = ({dte,setPdfSource}) =>{
   const {getBill,getBillXML, getInfo} = useApi();
-  const {cancelDte} = useDte();
+  const {cancelDte,generateEmailStringBox} = useDte();
   const {getUser} = useUser();
   const [loading,setLoading] = useState(false);
   const [user,setUser] = useState();
