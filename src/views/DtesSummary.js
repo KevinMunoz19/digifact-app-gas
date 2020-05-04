@@ -10,13 +10,19 @@ import {
     Button,
     TouchableOpacity,
     ImageBackground,
-    Modal
+    Modal,
+		Picker,
+		Alert,
 }	from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import DteBox from '../components/DteBox';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import PdfView from "../components/PdfView";
 import IosHeader from '../components/IosHeader';
+import useUser from '../utils/useUser';
+
+import DatePicker from 'react-native-date-picker';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
 const Dtes = () =>{
 
@@ -30,13 +36,13 @@ const Dtes = () =>{
 		const [dteListCheck,setDteListCheck] = useState([]);
 		const [dteListCard,setDteListCard] = useState([]);
 
-		const [count0,setCount0] = useState('');
-		const [count1,setCount1] = useState('');
-		const [count2,setCount2] = useState('');
+		const [count0,setCount0] = useState('0');
+		const [count1,setCount1] = useState('0');
+		const [count2,setCount2] = useState('0');
 
-		const [amount0,setAmount0] = useState('');
-		const [amount1,setAmount1] = useState('');
-		const [amount2,setAmount2] = useState('');
+		const [amount0,setAmount0] = useState('0');
+		const [amount1,setAmount1] = useState('0');
+		const [amount2,setAmount2] = useState('0');
 
 		const [tot,setTot] = useState([]);
 		const [amount,setAmount] = useState([]);
@@ -44,95 +50,192 @@ const Dtes = () =>{
 		const [todayDay,setTodayDay] = useState('');
 		const [todayDay2,setTodayDay2] = useState('');
 
+		const [selectedDate1, setSelectedDate1] = useState(new Date());
+		const [selectedDate2, setSelectedDate2] = useState(new Date());
 
+		const {getUser} = useUser();
+		const [user,setUser] = useState();
 
-		useEffect(()=>{
-        var query = `select * from dte where payment = 0`;
-        select(query,[],(dtes)=>{
-					console.log("documentos efectivo idp");
-					console.log(dtes[0].cantidadgalones);
-            setDteListCash(dtes);
-        })
-    },[])
+		const [num,setNum] = useState('');
 
-    useEffect(()=>{
-        var queryc = `select * from dte where payment = 1`;
-        select(queryc,[],(dtesc)=>{
-					console.log("documentos cheque idp");
-					console.log(dtesc[0].cantidadgalones);
-            setDteListCheck(dtesc);
-        })
-    },[])
+		const [st,setSt] = useState({
+      tableHead: ['Visite Date', 'Member', 'you ...', 'etc..'],
+      tableData: [
+        ['07/29/2016', 'JEFF', '$46.80', '...'],
+        ['07/29/2016', 'JEFF', '$46.80', '...'],
+        ['07/29/2016', 'JEFF', '$46.80', '...'],
+        ['07/29/2016', 'JEFF', '$46.80', '...']
+      ]
+    })
 
-		useEffect(()=>{
-        var queryt = `select * from dte where payment = 2`;
-        select(queryt,[],(dtest)=>{
-					console.log("documentos tarjeta");
-					console.log(dtest);
-            setDteListCard(dtest);
-        })
-    },[])
+		function PadLeft(value, length) {
+			return (value.toString().length < length) ? PadLeft("0" + value, length) :
+			value;
+		}
 
 		useEffect(()=>{
-			var qt = `select count(id) ct, payment from dte group by payment`;
-			select(qt,[],(tt)=>{
+			if(pdfSource != null){
+				setLoading(false);
+				setPdfModalVisible(true);
+			}
+	  },[pdfSource]);
+
+	    const onClosePdf = ()=>{
+				setPdfModalVisible(false);
+			}
+
+		useEffect(()=>{
+			getUser((userInfo)=>{
+				setUser(userInfo);
+				var x = userInfo.string_nit;
+				setNum(x);
+			})
+		},[])
+
+		function searchbydate() {
+
+		setDteListCash([]);
+		setDteListCheck([]);
+		setDteListCard([]);
+		setCount0('0');
+		setCount1('0');
+		setCount2('0');
+		setAmount0('0');
+		setAmount1('0');
+		setAmount2('0');
+		setSt({
+				tableHead: ['', 'Cantidad', 'Total'],
+				tableData: [
+					['Efectivo', `0`, `Q. 00.00`],
+					['Cheque', `0`, `Q. 00.00`],
+					['Tarjeta', `0`, `Q. 00.00`]
+
+				]
+			})
+
+		if ((selectedDate1 <= selectedDate2) || (selectedDate1.getDate() == selectedDate2.getDate() && selectedDate1.getMonth() == selectedDate2.getMonth() && selectedDate1.getFullYear() == selectedDate2.getFullYear())) {
+
+				var iDay = PadLeft(selectedDate1.getDate(),2);
+				var iMonth = PadLeft((selectedDate1.getMonth() + 1),2);
+				var iYear = selectedDate1.getFullYear();
+				var fDay = PadLeft(selectedDate2.getDate() + 1,2);
+				var fMonth = PadLeft((selectedDate2.getMonth() + 1),2);
+				var fYear = selectedDate2.getFullYear();
+
+				var query = `select * from dte where string_nit = '${num}' and payment = 0 and date >= date('${iYear}-${iMonth}-${iDay} 00:00:00') and date <= date('${fYear}-${fMonth}-${fDay} 23:59:59')`;
+				select(query,[],(dtes)=>{
+		    	setDteListCash(dtes);
+		    })
+
+				var queryc = `select * from dte where string_nit = '${num}' and payment = 1 and date >= date('${iYear}-${iMonth}-${iDay} 00:00:00') and date <= date('${fYear}-${fMonth}-${fDay} 23:59:59')`;
+		    select(queryc,[],(dtesc)=>{
+		    	setDteListCheck(dtesc);
+		    })
+
+				var queryt = `select * from dte where string_nit = '${num}' and payment = 2 and date >= date('${iYear}-${iMonth}-${iDay} 00:00:00') and date <= date('${fYear}-${fMonth}-${fDay} 23:59:59')`;
+		    select(queryt,[],(dtest)=>{
+		    	setDteListCard(dtest);
+		    })
+
+				var qt = `select count(id) ct, payment from dte where string_nit = '${num}' and date >= date('${iYear}-${iMonth}-${iDay} 00:00:00') and date <= date('${fYear}-${fMonth}-${fDay} 23:59:59') group by payment`;
+				select(qt,[],(tt)=>{
 					setCount0(tt[0].ct)
 					setCount1(tt[1].ct)
 					setCount2(tt[2].ct)
-			})
+				})
 
-			var qa = `select sum(amount) at, payment from dte group by payment`;
-			select(qa,[],(ta)=>{
-				setAmount0(ta[0].at);
-				setAmount1(ta[1].at);
-				setAmount2(ta[2].at);
-			})
-    },[])
+				var qa = `select sum(amount) at, payment from dte where string_nit = '${num}' and date >= date('${iYear}-${iMonth}-${iDay} 00:00:00') and date <= date('${fYear}-${fMonth}-${fDay} 23:59:59') group by payment`;
+				select(qa,[],(ta)=>{
+					setAmount0(ta[0].at);
+					setAmount1(ta[1].at);
+					setAmount2(ta[2].at);
+				})
 
-		useEffect(()=>{
-			var tzoffset = (new Date()).getTimezoneOffset()*60000;
-	    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
-			var nowDate = localISOTime.slice(0,10);
-        var querybyday = `select * from dte where payment = 0 and date >= date('${nowDate.trim()} 00:00:00')`;
-        select(querybyday,[],(dteday)=>{
-					setTodayDay(dteday[0].date);
-					//console.log(todayDay.slice(0,10).trim());
-        })
-    },[])
-
-		useEffect(()=>{
-			var tzoffset = (new Date()).getTimezoneOffset()*60000;
-	    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
-			var nowDate = localISOTime.slice(0,10);
-			var nowYear = localISOTime.slice(0,4);
-			var nowMonth = localISOTime.slice(5,7);
-
-        var querybyday2 = `select * from dte where payment = 0 and date >= date('${nowYear.trim()}-${nowMonth.trim()}-01 00:00:00')`;
-        select(querybyday2,[],(dteday2)=>{
-					setTodayDay2(dteday2[0].date);
-					//console.log(todayDay.slice(0,10).trim());
-        })
-				console.log("query string");
-				console.log(querybyday2);
-
-    },[])
-
-
-
-
-
-
-
-    useEffect(()=>{
-		if(pdfSource != null){
-			setLoading(false);
-			setPdfModalVisible(true);
+			} else {
+				Alert.alert(`La fecha inicial debe ser menor a la fecha final`);
+			}
 		}
-    },[pdfSource]);
 
-    const onClosePdf = ()=>{
-		setPdfModalVisible(false);
-	}
+
+
+		// useEffect(()=>{
+    //     var query = `select * from dte where payment = 0`;
+    //     select(query,[],(dtes)=>{
+		// 			console.log("documentos efectivo idp");
+		// 			console.log(dtes[0].cantidadgalones);
+    //         setDteListCash(dtes);
+    //     })
+    // },[])
+		//
+    // useEffect(()=>{
+    //     var queryc = `select * from dte where payment = 1`;
+    //     select(queryc,[],(dtesc)=>{
+		// 			console.log("documentos cheque idp");
+		// 			console.log(dtesc[0].cantidadgalones);
+    //         setDteListCheck(dtesc);
+    //     })
+    // },[])
+		//
+		// useEffect(()=>{
+    //     var queryt = `select * from dte where payment = 2`;
+    //     select(queryt,[],(dtest)=>{
+		// 			console.log("documentos tarjeta");
+		// 			console.log(dtest);
+    //         setDteListCard(dtest);
+    //     })
+    // },[])
+		//
+		// useEffect(()=>{
+		// 	var qt = `select count(id) ct, payment from dte group by payment`;
+		// 	select(qt,[],(tt)=>{
+		// 			setCount0(tt[0].ct)
+		// 			setCount1(tt[1].ct)
+		// 			setCount2(tt[2].ct)
+		// 	})
+		//
+		// 	var qa = `select sum(amount) at, payment from dte group by payment`;
+		// 	select(qa,[],(ta)=>{
+		// 		setAmount0(ta[0].at);
+		// 		setAmount1(ta[1].at);
+		// 		setAmount2(ta[2].at);
+		// 	})
+    // },[])
+		//
+		// useEffect(()=>{
+		// 	var tzoffset = (new Date()).getTimezoneOffset()*60000;
+	  //   var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
+		// 	var nowDate = localISOTime.slice(0,10);
+    //     var querybyday = `select * from dte where payment = 0 and date >= date('${nowDate.trim()} 00:00:00')`;
+    //     select(querybyday,[],(dteday)=>{
+		// 			setTodayDay(dteday[0].date);
+		// 			//console.log(todayDay.slice(0,10).trim());
+    //     })
+    // },[])
+		//
+		// useEffect(()=>{
+		// 	var tzoffset = (new Date()).getTimezoneOffset()*60000;
+	  //   var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
+		// 	var nowDate = localISOTime.slice(0,10);
+		// 	var nowYear = localISOTime.slice(0,4);
+		// 	var nowMonth = localISOTime.slice(5,7);
+		//
+    //     var querybyday2 = `select * from dte where payment = 0 and date >= date('${nowYear.trim()}-${nowMonth.trim()}-01 00:00:00')`;
+    //     select(querybyday2,[],(dteday2)=>{
+		// 			setTodayDay2(dteday2[0].date);
+		// 			//console.log(todayDay.slice(0,10).trim());
+    //     })
+		// 		console.log("query string");
+		// 		console.log(querybyday2);
+		//
+    // },[])
+
+
+
+
+
+
+
+
 
 
 	return(
@@ -155,26 +258,56 @@ const Dtes = () =>{
                     <Text style={styles.textHeader}>RESUMEN DE FACTURAS</Text>
                 </View>
             </View>
+
+
             <View style={styles.bodyContainer}>
                 <ScrollView style={styles.scroll}>
 
+								<View style={styles.headerContainerSub}>
+										<View style={styles.textHeaderContainerSub}>
+												<Text style={styles.textHeaderSub}>Desde</Text>
+										</View>
+								</View>
 
+								<DatePicker
+									date = {selectedDate1}
+									onDateChange = {setSelectedDate1}
+									mode="date"
+									locale = "es"
+									style={styles.dp}
+								/>
 
+								<View style={styles.headerContainerSub}>
+										<View style={styles.textHeaderContainerSub}>
+												<Text style={styles.textHeaderSub}>Hasta</Text>
+										</View>
+								</View>
 
-								<Text>Efectivo #{count0} Q{amount0}</Text>
-								<Text>Cheque #{count1} Q{amount1}</Text>
-								<Text>Tarjeta #{count2} Q{amount2}</Text>
-								<Text>Fecha{todayDay}</Text>
-								<Text>Fecha{todayDay2}</Text>
+								<DatePicker
+									date = {selectedDate2}
+									onDateChange = {setSelectedDate2}
+									mode="date"
+									locale = "es"
+									style={styles.dp}
 
+								/>
 
+								<View style={styles.buttonContainer}>
+									<TouchableOpacity style={styles.button} onPress={searchbydate}>
+										<Text style={styles.buttonText}>Buscar</Text>
+									</TouchableOpacity>
+								</View>
 
-
-
-
-
-
-
+								<View style={styles.containert}>
+					        <Table borderStyle={{borderWidth: 2, borderColor: '#e78b4d'}}>
+					          <Row data={['', 'Cantidad', 'Total']} style={styles.headt} textStyle={styles.textt}/>
+					          <Rows data={[
+							        ['Efectivo', `${count0}`, `Q. ${amount0}`],
+							        ['Cheque', `${count1}`, `Q. ${amount1}`],
+							        ['Tarjeta', `${count2}`, `Q. ${amount2}`]
+							      ]} textStyle={styles.textt}/>
+					        </Table>
+					      </View>
 
 
 									<View style={styles.headerContainerSub}>
@@ -343,6 +476,73 @@ const styles = StyleSheet.create({
         color:'white',
         fontSize:12
     },
+		button:{
+		width:'40%',
+		height:'90%',
+		backgroundColor:'#828B95',
+		alignItems:'center',
+		justifyContent:'center'
+	},
+	buttonText:{
+		color:'white',
+		fontSize:15
+	},
+	buttonContainer:{
+		flex:2,
+		backgroundColor:'white',
+		alignItems:'center'
+	},
+	formRow: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			marginBottom: 30
+	},
+	inputContainer:{
+			flex: 1,
+	},
+	input: {
+		borderBottomColor:'#828B95',
+		borderBottomWidth:1
+	},
+	selectInput: {
+			fontSize: 10
+	},
+	containert: {
+		flex: 1,
+		padding: 16,
+		paddingTop: 30,
+		backgroundColor: '#fff'
+	},
+	headt: {
+		height: 30,
+		backgroundColor: '#f06f17'
+	},
+	textt: {
+		margin: 6
+	},
+	dp: {
+		alignItems:'center',
+		justifyContent:'center',
+		height: 80,
+		//padding: 10,
+		marginLeft: 30
+	},
+	textHeaderContainerSubT:{
+			width:'45%',
+			height:'80%',
+			backgroundColor:'rgb(234, 103, 46)',
+			alignItems:'center',
+			justifyContent:'center'
+	},
+	headerContainerSubT:{
+			flex:1,
+			alignItems:'center',
+			justifyContent:'center'
+	},
+	textHeaderSubT:{
+			color:'white',
+			fontSize:12
+	},
 });
 
 export default Dtes;

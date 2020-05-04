@@ -96,30 +96,38 @@ const Dte = () =>{
 
 	const [payment,setPayment] = useState(0);
 
+	const [estNumber, setEstNumber] = useState(0);
+	const [arrayZc,setArrayZc] = useState([]);
+	const [arrayNc,setArrayNc] = useState([]);
+	const [arrayDc,setArrayDc] = useState([]);
+
+	const [nnPrint,setNnPrint] = useState('');
+	const [nombreComercialPrint,setNombreComercialPrint] = useState('');
+	const [direccionComercialPrint,setDireccionComercialPrint] = useState('');
+
+	const [visibleUniqueProduct,setVisibleUniqueProduct] = useState(false);
+	const [cantidadUniqueProduct,setCantidadUniqueProduct] = useState(0);
+	const [precioUniqueProduct,setPrecioUniqueProduct] = useState(0);
+	const [nombreUniqueProduct,setNombreUniqueProduct] = useState('');
+
 	const [idpSuper,setIdpSuper] = useState(4.7);
 	const [idpRegular,setIdpRegular] = useState(4.6);
 	const [idpDiesel,setIdpDiesel] = useState(1.3);
-
 	const [precioSuper,setPrecioSuper] = useState(0.0);
 	const [precioRegular,setPrecioRegular] = useState(0.0);
 	const [precioDiesel,setPrecioDiesel] = useState(0.0);
-
 	const [bombas,setBombas] = useState([]);
-
 	const [datosGas,setDatosGas] = useState([]);
-
 	const [gasType, setGasType] = useState("");
 	const [bombNumber, setBombNumber] = useState("");
-
 	const [cantidadGalones,setCantidadGalones] = useState(0);
-
 	const [gasPrice,setGasPrice] = useState(0);
 	const [idpGas,setIdpGas] = useState(0);
 
 
 	const radioProps = [
 		{label: 'Nit  ', value: false },
-		{label: 'Consumidor Final	', value: true }
+		{label: 'CF	', value: true }
 	];
 
 	const radioIVA = [
@@ -146,16 +154,58 @@ const Dte = () =>{
 
 	useEffect(()=>{
 		getUser((userInfo)=>{
+			setNumEstablecimiento(0);
 			setUser(userInfo);
+			setNitTemporal(userInfo.string_nit.replace(/0+(?!$)/,''));
 		})
-
-
 	},[])
 
 	useEffect(()=>{
-		//console.log('Cambio de user:');
-		setNumEstablecimiento(0);
-	},[user])
+		// getInfo(newnitfetch, (nom)=>{
+		getInfo(nitTemporal, (nom)=>{
+			setNn(nom.toString())
+		},(ca)=>{
+			setCalle(ca.toString())
+		},
+		(dir)=>{
+			setDireccion(dir.toString())
+		},
+		(zon)=>{
+			setZona(zon.toString())
+		},
+		(fr)=>{
+			setFrases(fr.toString())
+		},
+		(af)=>{
+			setAfiliacion(af.toString())
+		},
+		(zpc)=>{
+			setZipc(zpc.toString())
+		},
+		(nomc)=>{
+			setNombreComercial(nomc.toString())
+		},
+		(dirc)=>{
+			setDireccionComercial(dirc.toString())
+		},
+		(err)=>{
+				if(err==200){
+					Alert.alert('Error de conexion');
+				}else{
+					Alert.alert(err);
+				}
+			});
+		},[nitTemporal])
+
+	useEffect(()=>{
+		var zcArray = zipc.trim().split('|');
+		setArrayZc(zcArray);
+		var ncArray = nombreComercial.trim().split('|');
+		setArrayNc(ncArray);
+		var dcArray = direccionComercial.trim().split('|');
+		setArrayDc(dcArray);
+	},[zipc,nombreComercial,direccionComercial])
+
 
 	function addGas() {
 		console.log("Cantidad de Galones")
@@ -175,40 +225,40 @@ const Dte = () =>{
 			console.log("Precio DB");
 			console.log(gasproduct);
 			setProducts([...products,gasproduct]);
-			var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
-			getInfo(newnitfetch, (nom)=>{
-				setNn(nom.toString())
-			},(ca)=>{
-				setCalle(ca.toString())
-			},
-			(dir)=>{
-				setDireccion(dir.toString())
-			},
-			(zon)=>{
-				setZona(zon.toString())
-			},
-			(fr)=>{
-				setFrases(fr.toString())
-			},
-			(af)=>{
-				setAfiliacion(af.toString())
-			},
-			(zpc)=>{
-				setZipc(zpc.toString())
-			},
-			(nomc)=>{
-				setNombreComercial(nomc.toString())
-			},
-			(dirc)=>{
-				setDireccionComercial(dirc.toString())
-			},
-			(err)=>{
-				if(err==200){
-					Alert.alert('Error de conexion');
-				}else{
-					Alert.alert(err);
-				}
-			});
+			// var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
+			// getInfo(newnitfetch, (nom)=>{
+			// 	setNn(nom.toString())
+			// },(ca)=>{
+			// 	setCalle(ca.toString())
+			// },
+			// (dir)=>{
+			// 	setDireccion(dir.toString())
+			// },
+			// (zon)=>{
+			// 	setZona(zon.toString())
+			// },
+			// (fr)=>{
+			// 	setFrases(fr.toString())
+			// },
+			// (af)=>{
+			// 	setAfiliacion(af.toString())
+			// },
+			// (zpc)=>{
+			// 	setZipc(zpc.toString())
+			// },
+			// (nomc)=>{
+			// 	setNombreComercial(nomc.toString())
+			// },
+			// (dirc)=>{
+			// 	setDireccionComercial(dirc.toString())
+			// },
+			// (err)=>{
+			// 	if(err==200){
+			// 		Alert.alert('Error de conexion');
+			// 	}else{
+			// 		Alert.alert(err);
+			// 	}
+			// });
 		}
 	}
 
@@ -259,49 +309,76 @@ const Dte = () =>{
 	}
 
 	const onProductSelect = (product)=>{
-		console.log("producto")
-		console.log(typeof product)
-		console.log(product)
+
 		console.warn('pasa el producto a la vista de dte');
 		setTimeout(()=>{
 			if(createProductModalVisible)setCreateProductModalVisible(false);
 			if(productModalVisible) setProductModalVisible(false);
 		},500)
 		setProducts([...products,product]);
-		 var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
-		 getInfo(newnitfetch, (nom)=>{
-		 	setNn(nom.toString())
-		 },(ca)=>{
-		 	setCalle(ca.toString())
-		 },
-		 (dir)=>{
-		 	setDireccion(dir.toString())
-		 },
-		 (zon)=>{
-		 	setZona(zon.toString())
-		 },
-		 (fr)=>{
-		 	setFrases(fr.toString())
-		 },
-		 (af)=>{
-		 	setAfiliacion(af.toString())
-		 },
-		 (zpc)=>{
-		 	setZipc(zpc.toString())
-		 },
-		 (nomc)=>{
-		 	setNombreComercial(nomc.toString())
-		 },
-		 (dirc)=>{
-		 	setDireccionComercial(dirc.toString())
-		 },
-		 (err)=>{
-		 	if(err==200){
-		 		Alert.alert('Error de conexion');
-		 	}else{
-		 		Alert.alert(err);
-		 	}
-		 });
+
+		 //
+		 // var newnitfetch = user.string_nit.replace(/0+(?!$)/,'')
+		 // getInfo(newnitfetch, (nom)=>{
+		 // 	setNn(nom.toString())
+		 // },(ca)=>{
+		 // 	setCalle(ca.toString())
+		 // },
+		 // (dir)=>{
+		 // 	setDireccion(dir.toString())
+		 // },
+		 // (zon)=>{
+		 // 	setZona(zon.toString())
+		 // },
+		 // (fr)=>{
+		 // 	setFrases(fr.toString())
+		 // },
+		 // (af)=>{
+		 // 	setAfiliacion(af.toString())
+		 // },
+		 // (zpc)=>{
+		 // 	setZipc(zpc.toString())
+		 // },
+		 // (nomc)=>{
+		 // 	setNombreComercial(nomc.toString())
+		 // },
+		 // (dirc)=>{
+		 // 	setDireccionComercial(dirc.toString())
+		 // },
+		 // (err)=>{
+		 // 	if(err==200){
+		 // 		Alert.alert('Error de conexion');
+		 // 	}else{
+		 // 		Alert.alert(err);
+		 // 	}
+		 // });
+	}
+
+	const onUniqueProduct = ()=> {
+		console.log("Entrada a onUniqueProduct")
+		setVisibleUniqueProduct(true);
+	}
+
+	const onUniqueProductAdd = ()=> {
+		console.log("Entrada a onUniqueProductAdd")
+		setVisibleUniqueProduct(false);
+		addUP();
+	}
+
+	function addUP() {
+		if (cantidadUniqueProduct <= 0.0 || precioUniqueProduct <= 0.0 || nombreUniqueProduct.trim() == ""){
+			Alert.alert('Verifica los datos! Todos los datos son requeridos');
+		} else {
+			var uniqueProduct = { price: precioUniqueProduct, code: "uniqueproduct", name: nombreUniqueProduct, id: 150, quantity: cantidadUniqueProduct };
+			console.log("Precio DB");
+			console.log(uniqueProduct);
+			setProducts([...products,uniqueProduct]);
+		}
+
+		setCantidadUniqueProduct(0);
+		setPrecioUniqueProduct(0);
+		setNombreUniqueProduct("");
+
 	}
 
 	const onProductRemove = (productToRemove)=>{
@@ -321,12 +398,24 @@ const Dte = () =>{
 	const onGenerate = ()=>{
 		setLoading(true);
 
+		var direccionComercialArray = direccionComercial.trim().split('|');
+		var direccionComercialClean = direccionComercialArray[estNumber].replace(/ +(?= )/g,'');
+		var nombreComercialArray = nombreComercial.trim().split('|');
+		var nombreComercialClean = nombreComercialArray[estNumber].toString().trim();
+		while (nombreComercialClean.substring(0,1) == "<" || (nombreComercialClean.substring(0,1) >='0' && nombreComercialClean.substring(0,1) <='9')) {
+			nombreComercialClean = nombreComercialClean.substring(1);
+		}
+		setNombreComercialPrint(nombreComercialClean);
+		setDireccionComercialPrint(direccionComercialClean);
+		setNnPrint(nn);
+
 		if (user) {
 			if (email.trim().length > 0 ? validateEmail(email) : true){
 				if (products.length > 0) {
 					if((!cf && client.nit.trim().length > 0) || cf) {
 						if(iva == 0 || iva == 12){
-							generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial, direccionComercial, numEstablecimiento,payment,idpSuper,idpRegular,idpDiesel,bombNumber, gasType, cantidadGalones, (res)=>{
+							// generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial, direccionComercial, numEstablecimiento,payment,idpSuper,idpRegular,idpDiesel,bombNumber, gasType, cantidadGalones, (res)=>{
+generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial, direccionComercial, estNumber,payment,idpSuper,idpRegular,idpDiesel,bombNumber, gasType, cantidadGalones, (res)=>{
 							//generateString(products,client,cf,iva,email,user, nn, calle, direccion, zona, frases, afiliacion,zipc, nombreComercial,direccionComercial, (res)=>{
 								console.log("productos");
 								console.log(typeof products)
@@ -378,14 +467,14 @@ const Dte = () =>{
 	}
 
 	const onPrint = () => {
-		printer.print(JSON.stringify(documento),JSON.stringify(userSend),JSON.stringify(productsSend),nn.toString(),nombreComercial.toString(),direccionComercial.toString());
-		// reprint
+
 		setTimeout(()=>{
-			printer.print(JSON.stringify(documento),JSON.stringify(userSend),JSON.stringify(productsSend),nn.toString(),nombreComercial.toString(),direccionComercial.toString());
+			printer.print(JSON.stringify(documento),JSON.stringify(userSend),JSON.stringify(productsSend),nnPrint.toString(),nombreComercialPrint.toString(),direccionComercialPrint.toString());
+			// printer.print(JSON.stringify(documento),JSON.stringify(userSend),JSON.stringify(productsSend),nn.toString(),nombreComercial.toString(),direccionComercial.toString());
 		},5000);
 
 
-		Actions.home();
+		// Actions.home();
 	}
 
 	const onGenerateE = ()=> {
@@ -645,10 +734,36 @@ const Dte = () =>{
 
 
 
-
-
-
 					</View>
+
+
+					<View style={{width:'100%',alignItems:'center'}}>
+						<SectionDivider width={'80%'} sectionName={'ESTABLECIMIENTO'}/>
+					</View>
+
+					<View style={[styles.inputContainer, styles.input]}>
+	  				<Picker
+	  					style={styles.selectInput}
+	  					placeholder="Seleccionar Establecimiento"
+	  					selectedValue={estNumber}
+	  					onValueChange={(itemValue, itemIndex) => setEstNumber(itemValue)}
+	  				>
+	  					<Picker.Item label="" value={0} disabled={true} />
+	  					{arrayNc.map((usr,i)=>{
+	              var stringname = usr.toString().trim();
+	              while (stringname.substring(0,1) == "<" || (stringname.substring(0,1) >='0' && stringname.substring(0,1) <='9')) {
+	                stringname = stringname.substring(1);
+	              }
+	  						var st = `${usr.toString()}`;
+	  						var num = `${usr.toString()}`;
+	  							return(
+	  									<Picker.Item label= {stringname} value={i} />
+	  							)
+	  					})}
+	  				</Picker>
+	  			</View>
+
+
 
 
 
@@ -659,6 +774,72 @@ const Dte = () =>{
 
 					<View style={styles.contentContainer}>
 						<View style={{alignItems:'center'}}>
+
+
+						{!visibleUniqueProduct &&
+						<TouchableOpacity
+							style={styles.addProductContainer}
+							onPress={onUniqueProduct}
+						>
+							<Text>Agregar producto unico</Text>
+							<Icon
+								name="add-circle"
+								color="#f06f17"
+								size={30}
+								style={styles.addButtoIcon}
+							/>
+						</TouchableOpacity>
+
+						}
+
+
+							{visibleUniqueProduct &&
+								<TextInput
+									onChangeText={(e)=>{setNombreUniqueProduct(e)}}
+									placeholder="Nombre Producto"
+									placeholderTextColor="black"
+									style={styles.inputBorder}
+								/>
+							}
+
+							{visibleUniqueProduct &&
+								<TextInput
+									onChangeText={(e)=>{setPrecioUniqueProduct(e)}}
+									placeholder="Precio Unitario"
+									placeholderTextColor="black"
+									style={styles.inputBorder}
+									keyboardType = 'numeric'
+								/>
+							}
+
+							{visibleUniqueProduct &&
+								<TextInput
+									onChangeText={(e)=>{setCantidadUniqueProduct(e)}}
+									placeholder="Cantidad"
+									placeholderTextColor="black"
+									style={styles.inputBorder}
+									keyboardType = 'numeric'
+								/>
+							}
+
+
+						{visibleUniqueProduct &&
+							<TouchableOpacity
+								onPress={onUniqueProductAdd}
+								style={styles.actionButton}>
+								<Icon
+									name="add"
+									color="#f06f17"
+									size={50}
+									style={styles.icon}
+								/>
+								<Text >Agregar</Text>
+							</TouchableOpacity>
+						}
+
+
+
+
 							<TouchableOpacity
 								style={styles.addProductContainer}
 								onPress={() => setProductModalVisible(true)}

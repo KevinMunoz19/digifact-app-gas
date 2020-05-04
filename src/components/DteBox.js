@@ -24,6 +24,7 @@ import useUser from '../utils/useUser';
 import DteOptions from './DteOptions.component';
 import base64 from 'react-native-base64';
 import { validateEmail } from '../utils/emailValidator';
+import DialogInput from 'react-native-dialog-input';
 import fb from 'rn-fetch-blob'
 const printer = NativeModules.PrintModule;
 
