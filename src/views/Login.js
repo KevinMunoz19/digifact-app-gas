@@ -25,9 +25,23 @@ const Login = () =>{
 	const [nit,setNit] = useState('');
 	const [username,setUsername] = useState('');
 	const [password,setPassword] = useState('');
-	const {setUser,getUser} = useUser();
+	const {setUser,getUser, confirmContract, setUserInfo} = useUser();
 	const {login} = useApi();
 	const [loading,setLoading] = useState(false);
+
+
+	const [formData, setFormData] = useState({
+			contactName: "DigifactApp",
+			id: "123456",
+			nation: "Guatemala",
+			job: "null",
+			certificate: "null",
+			certificateName:"null",
+			cellphone: '+ 502 12345678',
+			email: 'digifactapp@gmail.com',
+			logo: "null",
+			logoName:"null"
+	});
 
 	useEffect(()=>{
 		getUser((users)=>{
@@ -56,19 +70,23 @@ const Login = () =>{
 						name:username,
 						nit:nit,
 						stringNit:response.otorgado_a,
-						token:response.Token
+						token:response.Token,
+
 					}
 					setUser(user,(userInfo)=>{
 						setLoading(false);
 						console.log('aqui el que necesito',userInfo);
 						console.log(userInfo.contact_name);
-						if(userInfo.contact_name == null){
-							Actions.welcome();
-						}else if(userInfo.confirm_contract == null){
-							Actions.contract();
-						}else{
+
+
+
+						// if(userInfo.contact_name == null){
+						// 	Actions.welcome();
+						// }else if(userInfo.confirm_contract == null){
+						// 	Actions.contract();
+						// }else{
 							Actions.home();
-						}
+						// }
 					});
 				}else{
 					setLoading(false);
@@ -85,6 +103,12 @@ const Login = () =>{
 			console.log(err);
 			Alert.alert(`Error de la peticion -> ${err}`);
 		});
+
+
+
+
+
+
 	}
 
 
